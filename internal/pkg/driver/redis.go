@@ -59,9 +59,9 @@ func NewRedis(option RedisOption) *redis.Pool {
 		},
 		MaxIdle:         option.MaxIdle,
 		MaxActive:       option.MaxActive,
-		IdleTimeout:     option.IdleTimeout * time.Second,
+		IdleTimeout:     option.IdleTimeout,
 		Wait:            option.Wait,
-		MaxConnLifetime: option.MaxConnLifetime * time.Second,
+		MaxConnLifetime: option.MaxConnLifetime,
 	}
 
 	return pool

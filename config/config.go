@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Provider the config provider
 type Provider interface {
 	ConfigFileUsed() string
 	Get(key string) interface{}
@@ -28,10 +29,6 @@ type Provider interface {
 
 var defaultConfig *viper.Viper
 
-func Config() Provider {
-	return defaultConfig
-}
-
 func init() {
 	defaultConfig = readViperConfig()
 }
@@ -51,4 +48,9 @@ func readViperConfig() *viper.Viper {
 	}
 
 	return v
+}
+
+// Config return provider so that you can read config anywhere
+func Config() Provider {
+	return defaultConfig
 }

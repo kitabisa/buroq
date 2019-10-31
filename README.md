@@ -1,5 +1,7 @@
 # go-bootstrap
-this is a bootstrap service build with GO for our cookie cutter
+this is a bootstrap service build with GO for our cookie cutter.
+
+just build it and run. `localhost:3000/health_check` will give you response `200 OK`:
 
 ## DB driver
     * [mysql] (https://github.com/go-sql-driver/mysql)
@@ -9,3 +11,6 @@ this is a bootstrap service build with GO for our cookie cutter
 ## Cache driver
     * [redis] (https://redis.io)
     * driver using redigo (https://github.com/gomodule/redigo)
+
+## Migration
+

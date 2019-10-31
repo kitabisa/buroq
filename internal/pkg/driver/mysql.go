@@ -16,13 +16,9 @@ type DBMysqlOption struct {
 	Password             string
 	DBName               string
 	AdditionalParameters string
-	ConnectionSetting    ConnectionSetting
-}
-
-type ConnectionSetting struct {
-	MaxOpenConns    int
-	MaxIdleConns    int
-	ConnMaxLifetime time.Duration
+	MaxOpenConns         int
+	MaxIdleConns         int
+	ConnMaxLifetime      time.Duration
 }
 
 func NewMysqlDatabase(option DBMysqlOption) *gorp.DbMap {
@@ -31,9 +27,9 @@ func NewMysqlDatabase(option DBMysqlOption) *gorp.DbMap {
 		panic(fmt.Errorf("ERROR connect to DB MySQL: %s | %v", option.DBName, err))
 	}
 
-	db.SetConnMaxLifetime(option.ConnectionSetting.ConnMaxLifetime)
-	db.SetMaxIdleConns(option.ConnectionSetting.MaxIdleConns)
-	db.SetMaxOpenConns(option.ConnectionSetting.MaxOpenConns)
+	db.SetConnMaxLifetime(option.ConnMaxLifetime)
+	db.SetMaxIdleConns(option.MaxIdleConns)
+	db.SetMaxOpenConns(option.MaxOpenConns)
 
 	gorp := &gorp.DbMap{Db: db, Dialect: gorp.MySQLDialect{}}
 	return gorp

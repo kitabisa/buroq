@@ -5,6 +5,8 @@ import (
 	"os"
 
 	"github.com/kitabisa/go-bootstrap/config"
+	"github.com/kitabisa/go-bootstrap/internal/pkg/appcontext"
+	"github.com/kitabisa/go-bootstrap/internal/pkg/repository"
 	"github.com/spf13/cobra"
 )
 
@@ -36,4 +38,36 @@ func start() {
 	// TODO:
 	cfg := config.Config()
 	fmt.Print(cfg)
+
+	app := appcontext.NewAppContext(cfg)
+	dbMysql := app.GetDBInstance(appcontext.DBTypeMysql)
+	dbPostgre := app.GetDBInstance(appcontext.DBTypePostgre)
+	cache := app.GetCachePool()
+
+	repo = wiringRepository(repository.RepositoryOption{
+		DbMysql:   dbMysql,
+		DbPostgre: dbPostgre,
+		CachePool: cache,
+	})
+
+	_ = wiringService(service.ServiceOption{
+		Repo: repo,
+		CachePool: cache,
+	})
+}
+
+func wiringRepository(repoOption repository.RepositoryOption) repository.Repository {
+	repo := repository.NewRepository()
+
+	// TODO: wiring up all your repos here
+
+	return repo
+}
+
+func wiringService(serviceOption service.ServiceOption) service.Service {
+	service := service.NewService()
+
+	// TODO: wiring up all your services here
+
+	return service
 }
