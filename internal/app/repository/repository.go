@@ -1,7 +1,12 @@
 package repository
 
+import (
+	"github.com/gomodule/redigo/redis"
+	"gopkg.in/gorp.v2"
+)
+
 type RepositoryOption struct {
-	DbMysql *gorp.DbMap
+	DbMysql   *gorp.DbMap
 	DbPostgre *gorp.DbMap
 	CachePool *redis.Pool
 }

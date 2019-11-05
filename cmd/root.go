@@ -5,8 +5,10 @@ import (
 	"os"
 
 	"github.com/kitabisa/go-bootstrap/config"
+	"github.com/kitabisa/go-bootstrap/internal/app/repository"
+	"github.com/kitabisa/go-bootstrap/internal/app/server"
+	"github.com/kitabisa/go-bootstrap/internal/app/service"
 	"github.com/kitabisa/go-bootstrap/internal/pkg/appcontext"
-	"github.com/kitabisa/go-bootstrap/internal/pkg/repository"
 	"github.com/spf13/cobra"
 )
 
@@ -37,26 +39,28 @@ func init() {
 func start() {
 	// TODO:
 	cfg := config.Config()
-	fmt.Print(cfg)
 
 	app := appcontext.NewAppContext(cfg)
 	dbMysql := app.GetDBInstance(appcontext.DBTypeMysql)
 	dbPostgre := app.GetDBInstance(appcontext.DBTypePostgre)
 	cache := app.GetCachePool()
 
-	repo = wiringRepository(repository.RepositoryOption{
+	repo := wiringRepository(repository.RepositoryOption{
 		DbMysql:   dbMysql,
 		DbPostgre: dbPostgre,
 		CachePool: cache,
 	})
 
-	_ = wiringService(service.ServiceOption{
-		Repo: repo,
+	service := wiringService(service.ServiceOption{
+		Repo:      repo,
 		CachePool: cache,
 	})
+
+	server := server.NewServer(cfg, service)
+	server.StartApp()
 }
 
-func wiringRepository(repoOption repository.RepositoryOption) repository.Repository {
+func wiringRepository(repoOption repository.RepositoryOption) *repository.Repository {
 	repo := repository.NewRepository()
 
 	// TODO: wiring up all your repos here
@@ -64,7 +68,7 @@ func wiringRepository(repoOption repository.RepositoryOption) repository.Reposit
 	return repo
 }
 
-func wiringService(serviceOption service.ServiceOption) service.Service {
+func wiringService(serviceOption service.ServiceOption) *service.Service {
 	service := service.NewService()
 
 	// TODO: wiring up all your services here
