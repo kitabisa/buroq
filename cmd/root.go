@@ -41,26 +41,47 @@ func start() {
 	cfg := config.Config()
 
 	app := appcontext.NewAppContext(cfg)
-	dbMysql := app.GetDBInstance(appcontext.DBTypeMysql)
-	dbPostgre := app.GetDBInstance(appcontext.DBTypePostgre)
-	cache := app.GetCachePool()
+	dbMysql, err := app.GetDBInstance(appcontext.DBTypeMysql)
+	if err != nil {
+		// TODO: use logger
+		fmt.Printf("Failed to start | %v", err)
+		return
+	}
 
-	repo := wiringRepository(repository.RepositoryOption{
+	dbPostgre, err := app.GetDBInstance(appcontext.DBTypePostgre)
+	if err != nil {
+		// TODO: use logger
+		fmt.Printf("Failed to start | %v", err)
+		return
+	}
+
+	cache := app.GetCachePool()
+	cacheConn, err := cache.Dial()
+	if err != nil {
+		// TODO: use logger
+		fmt.Printf("Failed to start | %v", err)
+		return
+	}
+	defer cacheConn.Close()
+
+	repo := wiringRepository(repository.Option{
 		DbMysql:   dbMysql,
 		DbPostgre: dbPostgre,
 		CachePool: cache,
 	})
 
-	service := wiringService(service.ServiceOption{
-		Repo:      repo,
+	service := wiringService(service.Option{
+		DbMysql:   dbMysql,
+		DbPostgre: dbPostgre,
 		CachePool: cache,
+		Repo:      repo,
 	})
 
-	server := server.NewServer(cfg, service)
+	server := server.NewServer(app, cfg, service)
 	server.StartApp()
 }
 
-func wiringRepository(repoOption repository.RepositoryOption) *repository.Repository {
+func wiringRepository(repoOption repository.Option) *repository.Repository {
 	repo := repository.NewRepository()
 
 	// TODO: wiring up all your repos here
@@ -68,10 +89,12 @@ func wiringRepository(repoOption repository.RepositoryOption) *repository.Reposi
 	return repo
 }
 
-func wiringService(serviceOption service.ServiceOption) *service.Service {
-	service := service.NewService()
+func wiringService(serviceOption service.Option) *service.Service {
+	svc := service.NewService()
 
-	// TODO: wiring up all your services here
+	// wiring up all services
+	hc := service.NewHealthCheck(serviceOption)
+	svc.HealthCheck = hc
 
-	return service
+	return svc
 }

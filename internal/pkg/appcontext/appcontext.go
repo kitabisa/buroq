@@ -1,7 +1,7 @@
 package appcontext
 
 import (
-	"fmt"
+	"errors"
 
 	"github.com/gomodule/redigo/redis"
 	"github.com/kitabisa/go-bootstrap/config"
@@ -25,26 +25,27 @@ func NewAppContext(config config.Provider) *AppContext {
 }
 
 // GetDBInstance getting gorp instance, param: dbType can be "mysql" or "postgre"
-func (a *AppContext) GetDBInstance(dbType string) *gorp.DbMap {
+func (a *AppContext) GetDBInstance(dbType string) (*gorp.DbMap, error) {
 	var gorp *gorp.DbMap
+	var err error
 	switch dbType {
 	case DBTypeMysql:
 		dbOption := a.getMysqlOption()
-		gorp = driver.NewMysqlDatabase(dbOption)
+		gorp, err = driver.NewMysqlDatabase(dbOption)
 	case DBTypePostgre:
 		dbOption := a.getPostgreOption()
-		gorp = driver.NewPostgreDatabase(dbOption)
+		gorp, err = driver.NewPostgreDatabase(dbOption)
 	default:
-		panic(fmt.Errorf("Error get db instance, unknown db type"))
+		err = errors.New("Error get db instance, unknown db type")
 	}
 
-	return gorp
+	return gorp, err
 }
 
 func (a *AppContext) getMysqlOption() driver.DBMysqlOption {
 	return driver.DBMysqlOption{
 		Host:                 a.config.GetString("mysql.host"),
-		Port:                 a.config.GetInt("mysql.post"),
+		Port:                 a.config.GetInt("mysql.port"),
 		Username:             a.config.GetString("mysql.username"),
 		Password:             a.config.GetString("mysql.password"),
 		DBName:               a.config.GetString("mysql.name"),
@@ -58,7 +59,7 @@ func (a *AppContext) getMysqlOption() driver.DBMysqlOption {
 func (a *AppContext) getPostgreOption() driver.DBPostgreOption {
 	return driver.DBPostgreOption{
 		Host:        a.config.GetString("postgre.host"),
-		Port:        a.config.GetInt("postgre.post"),
+		Port:        a.config.GetInt("postgre.port"),
 		Username:    a.config.GetString("postgre.username"),
 		Password:    a.config.GetString("postgre.password"),
 		DBName:      a.config.GetString("postgre.name"),
@@ -73,7 +74,7 @@ func (a *AppContext) GetCachePool() *redis.Pool {
 func (a *AppContext) getCacheOption() driver.RedisOption {
 	return driver.RedisOption{
 		Host:               a.config.GetString("redis.host"),
-		Port:               a.config.GetInt("redis.post"),
+		Port:               a.config.GetInt("redis.port"),
 		Namespace:          a.config.GetString("redis.namespace"),
 		Password:           a.config.GetString("redis.password"),
 		DialConnectTimeout: a.config.GetDuration("redis.dial_connect_timeout"),

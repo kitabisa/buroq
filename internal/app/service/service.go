@@ -3,15 +3,23 @@ package service
 import (
 	"github.com/gomodule/redigo/redis"
 	"github.com/kitabisa/go-bootstrap/internal/app/repository"
+	"gopkg.in/gorp.v2"
 )
 
-type ServiceOption struct {
-	Repo      *repository.Repository
+// Option anything any service object needed
+type Option struct {
+	DbMysql   *gorp.DbMap
+	DbPostgre *gorp.DbMap
 	CachePool *redis.Pool
+	Repo      *repository.Repository
 }
 
-type Service struct{}
+// Service all service object injected here
+type Service struct {
+	HealthCheck IHealthCheck
+}
 
+// NewService preparing empty object of Service
 func NewService() *Service {
 	return &Service{}
 }

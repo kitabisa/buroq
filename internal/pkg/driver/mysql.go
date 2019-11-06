@@ -21,10 +21,10 @@ type DBMysqlOption struct {
 	ConnMaxLifetime      time.Duration
 }
 
-func NewMysqlDatabase(option DBMysqlOption) *gorp.DbMap {
+func NewMysqlDatabase(option DBMysqlOption) (*gorp.DbMap, error) {
 	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?%s", option.Username, option.Password, option.Host, option.Port, option.DBName, option.AdditionalParameters))
 	if err != nil {
-		panic(fmt.Errorf("ERROR connect to DB MySQL: %s | %v", option.DBName, err))
+		return nil, err
 	}
 
 	db.SetConnMaxLifetime(option.ConnMaxLifetime)
@@ -32,5 +32,5 @@ func NewMysqlDatabase(option DBMysqlOption) *gorp.DbMap {
 	db.SetMaxOpenConns(option.MaxOpenConns)
 
 	gorp := &gorp.DbMap{Db: db, Dialect: gorp.MySQLDialect{}}
-	return gorp
+	return gorp, nil
 }

@@ -9,6 +9,7 @@ import (
 
 	"github.com/kitabisa/go-bootstrap/config"
 	"github.com/kitabisa/go-bootstrap/internal/app/service"
+	"github.com/kitabisa/go-bootstrap/internal/pkg/appcontext"
 )
 
 // IServer interface for server
@@ -18,13 +19,15 @@ type IServer interface {
 }
 
 type server struct {
+	appCtx  *appcontext.AppContext
 	config  config.Provider
 	service *service.Service
 }
 
 // NewServer create object server
-func NewServer(config config.Provider, service *service.Service) IServer {
+func NewServer(appCtx *appcontext.AppContext, config config.Provider, service *service.Service) IServer {
 	return &server{
+		appCtx:  appCtx,
 		config:  config,
 		service: service,
 	}
@@ -51,7 +54,7 @@ func (s *server) StartApp() {
 	}()
 
 	srv.Addr = fmt.Sprintf("%s:%d", s.config.GetString("app.host"), s.config.GetInt("app.port"))
-	// srv.Handler = TODO: chi based handler
+	srv.Handler = Router(s.appCtx, s.service)
 
 	fmt.Printf("HTTP serve at %s\n", srv.Addr)
 

@@ -22,6 +22,7 @@ type RedisOption struct {
 	Namespace          string
 }
 
+// NewRedis create redis pool
 func NewRedis(option RedisOption) *redis.Pool {
 	dialConnectTimeoutOption := redis.DialConnectTimeout(option.DialConnectTimeout)
 	readTimeoutOption := redis.DialReadTimeout(option.ReadTimeout)
@@ -31,19 +32,17 @@ func NewRedis(option RedisOption) *redis.Pool {
 		Dial: func() (redis.Conn, error) {
 			c, err := redis.DialURL(fmt.Sprintf("redis://%s@%s:%d", option.Password, option.Host, option.Port), dialConnectTimeoutOption, readTimeoutOption, writeTimeoutOption)
 			if err != nil {
-				panic(fmt.Errorf("ERROR connect redis | %v", err))
+				return nil, fmt.Errorf("ERROR connect redis | %v", err)
 			}
 
 			if option.Password != "" {
 				if _, err := c.Do("AUTH", option.Password); err != nil {
-					c.Close()
-					panic(fmt.Sprintf("ERROR on AUTH redis | %v", err))
+					return nil, fmt.Errorf("ERROR on AUTH redis | %v", err)
 				}
 			}
 
 			if _, err := c.Do("SELECT", option.Namespace); err != nil {
-				c.Close()
-				panic(fmt.Sprintf("ERROR on SELECT namespace redis | %v", err))
+				return nil, fmt.Errorf("ERROR on SELECT namespace redis | %v", err)
 			}
 			return c, nil
 		},
@@ -53,7 +52,7 @@ func NewRedis(option RedisOption) *redis.Pool {
 			}
 			_, err := c.Do("PING")
 			if err != nil {
-				panic(fmt.Sprintf("ERROR on PING redis | %v", err))
+				return err
 			}
 			return nil
 		},

@@ -6,9 +6,11 @@ import (
 	"net/http"
 	"reflect"
 
+	"github.com/gomodule/redigo/redis"
 	"github.com/kitabisa/go-bootstrap/config"
 	"github.com/kitabisa/go-bootstrap/internal/app/service"
 	"github.com/kitabisa/go-bootstrap/version"
+	"gopkg.in/gorp.v2"
 )
 
 // Response our standar response object
@@ -16,7 +18,7 @@ type Response struct {
 	Code int          `json:"response_code"`
 	Desc ResponseDesc `json:"response_desc"`
 	Next *string      `json:"next,omitempty"`
-	Data interface{}  `json:"data.omitempty"`
+	Data interface{}  `json:"data,omitempty"`
 	Meta ResponseMeta `json:"meta"`
 }
 
@@ -34,15 +36,21 @@ type ResponseMeta struct {
 }
 
 type Handler struct {
-	Services *service.Service
-	config   config.Provider
+	config    config.Provider
+	services  *service.Service
+	dbMysql   *gorp.DbMap
+	dbPostgre *gorp.DbMap
+	cachePool *redis.Pool
 }
 
-func NewHandler(services *service.Service) *Handler {
+func NewHandler(svc *service.Service, dbMysql *gorp.DbMap, dbPostgre *gorp.DbMap, cachePool *redis.Pool) *Handler {
 	cfg := config.Config()
 	return &Handler{
-		Services: services,
-		config:   cfg,
+		config:    cfg,
+		services:  svc,
+		dbMysql:   dbMysql,
+		dbPostgre: dbPostgre,
+		cachePool: cachePool,
 	}
 }
 

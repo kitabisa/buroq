@@ -5,14 +5,19 @@ import (
 	"gopkg.in/gorp.v2"
 )
 
-type RepositoryOption struct {
+// Option anything any repo object needed
+type Option struct {
 	DbMysql   *gorp.DbMap
 	DbPostgre *gorp.DbMap
 	CachePool *redis.Pool
 }
 
-type Repository struct{}
+// Repository all repo object injected here
+type Repository struct {
+	// User IUserRepository
+}
 
+// NewRepository preparing empty object of Repo
 func NewRepository() *Repository {
 	return &Repository{}
 }
