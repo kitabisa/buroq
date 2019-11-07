@@ -9,6 +9,7 @@ import (
 	"github.com/kitabisa/go-bootstrap/internal/app/server"
 	"github.com/kitabisa/go-bootstrap/internal/app/service"
 	"github.com/kitabisa/go-bootstrap/internal/pkg/appcontext"
+	plog "github.com/kitabisa/perkakas/v2/log"
 	"github.com/spf13/cobra"
 )
 
@@ -37,29 +38,29 @@ func init() {
 }
 
 func start() {
-	// TODO:
 	cfg := config.Config()
+	logger := plog.NewLogger("go-bootstrap")
 
 	app := appcontext.NewAppContext(cfg)
 	dbMysql, err := app.GetDBInstance(appcontext.DBTypeMysql)
 	if err != nil {
-		// TODO: use logger
-		fmt.Printf("Failed to start | %v", err)
+		logger.AddMessage(plog.FatalLevel, fmt.Sprintf("Failed to start | %v", err))
+		logger.Print()
 		return
 	}
 
 	dbPostgre, err := app.GetDBInstance(appcontext.DBTypePostgre)
 	if err != nil {
-		// TODO: use logger
-		fmt.Printf("Failed to start | %v", err)
+		logger.AddMessage(plog.FatalLevel, fmt.Sprintf("Failed to start | %v", err))
+		logger.Print()
 		return
 	}
 
 	cache := app.GetCachePool()
 	cacheConn, err := cache.Dial()
 	if err != nil {
-		// TODO: use logger
-		fmt.Printf("Failed to start | %v", err)
+		logger.AddMessage(plog.FatalLevel, fmt.Sprintf("Failed to start | %v", err))
+		logger.Print()
 		return
 	}
 	defer cacheConn.Close()
@@ -77,7 +78,7 @@ func start() {
 		Repo:      repo,
 	})
 
-	server := server.NewServer(app, cfg, service)
+	server := server.NewServer(cfg, service, dbMysql, dbPostgre, cache, logger)
 	server.StartApp()
 }
 

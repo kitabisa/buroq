@@ -10,6 +10,7 @@ import (
 	"github.com/kitabisa/go-bootstrap/config"
 	"github.com/kitabisa/go-bootstrap/internal/app/service"
 	"github.com/kitabisa/go-bootstrap/version"
+	plog "github.com/kitabisa/perkakas/v2/log"
 	"gopkg.in/gorp.v2"
 )
 
@@ -41,9 +42,10 @@ type Handler struct {
 	dbMysql   *gorp.DbMap
 	dbPostgre *gorp.DbMap
 	cachePool *redis.Pool
+	logger    *plog.Logger
 }
 
-func NewHandler(svc *service.Service, dbMysql *gorp.DbMap, dbPostgre *gorp.DbMap, cachePool *redis.Pool) *Handler {
+func NewHandler(svc *service.Service, dbMysql *gorp.DbMap, dbPostgre *gorp.DbMap, cachePool *redis.Pool, logger *plog.Logger) *Handler {
 	cfg := config.Config()
 	return &Handler{
 		config:    cfg,
@@ -51,6 +53,7 @@ func NewHandler(svc *service.Service, dbMysql *gorp.DbMap, dbPostgre *gorp.DbMap
 		dbMysql:   dbMysql,
 		dbPostgre: dbPostgre,
 		cachePool: cachePool,
+		logger:    logger,
 	}
 }
 
@@ -90,6 +93,7 @@ func (h *Handler) WriteResponse(w http.ResponseWriter, httpStatus int, respCode 
 	}
 
 	respJSON, _ := json.Marshal(resp)
+	// h.logger.Print()
 	w.Write(respJSON)
 }
 
