@@ -10,8 +10,8 @@ import (
 )
 
 const (
-	DBTypeMysql   = "mysql"
-	DBTypePostgre = "postgre"
+	DBDialectMysql    = "mysql"
+	DBDialectPostgres = "postgres"
 )
 
 type AppContext struct {
@@ -29,10 +29,10 @@ func (a *AppContext) GetDBInstance(dbType string) (*gorp.DbMap, error) {
 	var gorp *gorp.DbMap
 	var err error
 	switch dbType {
-	case DBTypeMysql:
+	case DBDialectMysql:
 		dbOption := a.getMysqlOption()
 		gorp, err = driver.NewMysqlDatabase(dbOption)
-	case DBTypePostgre:
+	case DBDialectPostgres:
 		dbOption := a.getPostgreOption()
 		gorp, err = driver.NewPostgreDatabase(dbOption)
 	default:

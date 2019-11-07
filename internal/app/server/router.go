@@ -8,11 +8,12 @@ import (
 	"github.com/gomodule/redigo/redis"
 	"github.com/kitabisa/go-bootstrap/internal/app/handler"
 	"github.com/kitabisa/go-bootstrap/internal/app/service"
-	plog "github.com/kitabisa/perkakas/v2/log"
+	"github.com/kitabisa/perkakas/v2/log"
 	"gopkg.in/gorp.v2"
 )
 
-func Router(service *service.Service, dbMysql *gorp.DbMap, dbPostgre *gorp.DbMap, cachePool *redis.Pool, logger *plog.Logger) *chi.Mux {
+// Router a chi mux
+func Router(service *service.Service, dbMysql *gorp.DbMap, dbPostgre *gorp.DbMap, cachePool *redis.Pool, logger *log.Logger) *chi.Mux {
 	// m := middlewares.NewMiddleware(logger)
 	// logMiddleware := pmiddleware.NewHttpRequestLoggerMiddleware(logger)
 	r := chi.NewRouter()

@@ -10,7 +10,7 @@ import (
 	"github.com/kitabisa/go-bootstrap/config"
 	"github.com/kitabisa/go-bootstrap/internal/app/service"
 	"github.com/kitabisa/go-bootstrap/version"
-	plog "github.com/kitabisa/perkakas/v2/log"
+	"github.com/kitabisa/perkakas/v2/log"
 	"gopkg.in/gorp.v2"
 )
 
@@ -42,10 +42,10 @@ type Handler struct {
 	dbMysql   *gorp.DbMap
 	dbPostgre *gorp.DbMap
 	cachePool *redis.Pool
-	logger    *plog.Logger
+	logger    *log.Logger
 }
 
-func NewHandler(svc *service.Service, dbMysql *gorp.DbMap, dbPostgre *gorp.DbMap, cachePool *redis.Pool, logger *plog.Logger) *Handler {
+func NewHandler(svc *service.Service, dbMysql *gorp.DbMap, dbPostgre *gorp.DbMap, cachePool *redis.Pool, logger *log.Logger) *Handler {
 	cfg := config.Config()
 	return &Handler{
 		config:    cfg,
