@@ -78,8 +78,14 @@ func start() {
 		Repo:      repo,
 	})
 
-	server := server.NewServer(cfg, service, dbMysql, dbPostgre, cache, logger)
-	server.StartApp()
+	// run metric
+	loggerM := plog.NewLogger("go-bootstrap-metric")
+	serverM := server.NewServer(cfg, service, dbMysql, dbPostgre, cache, loggerM)
+	go serverM.StartMetric()
+
+	// run app
+	serverA := server.NewServer(cfg, service, dbMysql, dbPostgre, cache, logger)
+	serverA.StartApp()
 }
 
 func wiringRepository(repoOption repository.Option) *repository.Repository {
