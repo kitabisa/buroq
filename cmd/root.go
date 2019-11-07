@@ -91,7 +91,7 @@ func start() {
 func wiringRepository(repoOption repository.Option) *repository.Repository {
 	repo := repository.NewRepository()
 
-	// TODO: wiring up all your repos here
+	// wiring up all your repos here
 
 	return repo
 }
