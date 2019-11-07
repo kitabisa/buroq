@@ -26,7 +26,7 @@ just build it and run. `localhost:[port]/health_check` will give you HTTP status
     * also running side by side with the api server, with its own port on path `/metrics`
 
 ## Others
-    * using [perkakas] (https://github.com/kitabisa/perkakas) for logging middleware and write response
+    * using [perkakas] (https://github.com/kitabisa/perkakas) for any our standard middlewares and for writing response
     * overall using the [golang layout] (https://github.com/golang-standards/project-layout ), with minor changes for own needs
 
 ## IMPORTANT!
