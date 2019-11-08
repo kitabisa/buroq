@@ -10,6 +10,8 @@ github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc/go.mod h1:LOuy
 github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf/go.mod h1:ybxpYRFXyAe+OPACYpWeL0wqObRcbAqCMya13uyzqw0=
 github.com/apache/thrift v0.12.0/go.mod h1:cp2SuWMxlEZw2r+iP2GNCdIi4C1qmUzdZFSVb+bacwQ=
 github.com/armon/consul-api v0.0.0-20180202201655-eb2c6b5be1b6/go.mod h1:grANhF5doyWs3UAsr3K4I6qtAmlQcZDesFNEHPZAzj8=
+github.com/asaskevich/govalidator v0.0.0-20190424111038-f61b66f89f4a h1:idn718Q4B6AGu/h5Sxe66HYVdqdGu2l9Iebqhi/AEoA=
+github.com/asaskevich/govalidator v0.0.0-20190424111038-f61b66f89f4a/go.mod h1:lB+ZfQJz7igIIfQNfa7Ml4HSf2uFQQRzpGGRXenZAgY=
 github.com/beorn7/perks v0.0.0-20180321164747-3a771d992973/go.mod h1:Dwedo/Wpr24TaqPxmxbtue+5NUziq4I4S80YR8gNf3Q=
 github.com/beorn7/perks v1.0.0 h1:HWo1m869IqiPhD389kmkxeTalrjNbbJTC8LXupb+sl0=
 github.com/beorn7/perks v1.0.0/go.mod h1:KWe93zE9D1o94FZ5RNwFwVgaQK1VOXiVxmqh+CedLV8=
@@ -47,6 +49,7 @@ github.com/go-logfmt/logfmt v0.3.0/go.mod h1:Qt1PoO58o5twSAckw1HlFXLmHsOX5/0LbT9
 github.com/go-logfmt/logfmt v0.4.0/go.mod h1:3RMwSq7FuexP4Kalkev3ejPJsZTpXXBr9+V4qmtdjCk=
 github.com/go-playground/locales v0.12.1/go.mod h1:IUMDtCfWo/w/mtMfIE/IG2K+Ey3ygWanZIBtBW0W2TM=
 github.com/go-playground/universal-translator v0.16.0/go.mod h1:1AnU7NaIRDWWzGEKwgtJRd2xk99HeFyHw3yid4rvQIY=
+github.com/go-redsync/redsync v1.3.1 h1:EgfKAu/NI6Y3kZMvyRCT6arWTR+m4IedgdHz0HlIKK0=
 github.com/go-redsync/redsync v1.3.1/go.mod h1:qxZwM5JOimfq8y98Wk2+c8dKtxJgG5/yIl2ODz2E5Dk=
 github.com/go-sql-driver/mysql v1.4.1 h1:g24URVg0OFbNUTx9qqY1IRZ9D9z3iPyi5zKhQZpNwpA=
 github.com/go-sql-driver/mysql v1.4.1/go.mod h1:zAC/RDZ24gD3HViQzih4MyKcchzm+sOG5ZlKdlhCg5w=
@@ -112,6 +115,10 @@ github.com/kitabisa/perkakas v1.1.6 h1:1OeTsri5tU9pNRrUNgNC4IUXFGdZdWUrzoFQGhp+J
 github.com/kitabisa/perkakas v1.1.6/go.mod h1:3QU6jWTjzTcC9tBCEaB1HF7kGzXAX3oSD++6mDYnpKk=
 github.com/kitabisa/perkakas/v2 v2.5.2 h1:HzfJOmFmrY8skxESFIu63W4ksLFBqWfZDuqM0BrNQoo=
 github.com/kitabisa/perkakas/v2 v2.5.2/go.mod h1:RShAXZMSK/YpfpKXcLn3phmdQiqm4YtiY0rGiES0okU=
+github.com/kitabisa/perkakas/v2 v2.6.0 h1:yZOW9NELUQ2BnpWDHnnDCz4gAIS/vf9hIXRXFDxe0vM=
+github.com/kitabisa/perkakas/v2 v2.6.0/go.mod h1:7swg9mgKQcIKQyZ1y3edLYwyHc52QBhB+BXjOOC/JYc=
+github.com/kitabisa/perkakas/v2 v2.7.0 h1:X4/8Kp932acqSS9NZSXoTVmiB83+RkzP8xpt211Xn0Y=
+github.com/kitabisa/perkakas/v2 v2.7.0/go.mod h1:QqeGqs/GiQJc2vX3jwaVcPy5xa7Njkbd4LfGWA17oN0=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
 github.com/konsorten/go-windows-terminal-sequences v1.0.2/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
 github.com/kr/logfmt v0.0.0-20140226030751-b84e30acd515/go.mod h1:+0opPa2QZZtGFBFZlji/RkVcI2GknAs/DXo4wKdlNEc=

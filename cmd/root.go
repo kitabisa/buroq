@@ -9,7 +9,9 @@ import (
 	"github.com/kitabisa/go-bootstrap/internal/app/server"
 	"github.com/kitabisa/go-bootstrap/internal/app/service"
 	"github.com/kitabisa/go-bootstrap/internal/pkg/appcontext"
+	"github.com/kitabisa/perkakas/v2/distlock"
 	"github.com/kitabisa/perkakas/v2/log"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -44,48 +46,53 @@ func start() {
 	app := appcontext.NewAppContext(cfg)
 	dbMysql, err := app.GetDBInstance(appcontext.DBDialectMysql)
 	if err != nil {
-		logger.AddMessage(log.FatalLevel, fmt.Sprintf("Failed to start | %v", err))
-		logger.Print()
+		logrus.Fatalf("Failed to start | %v", err)
 		return
 	}
 
 	dbPostgre, err := app.GetDBInstance(appcontext.DBDialectPostgres)
 	if err != nil {
-		logger.AddMessage(log.FatalLevel, fmt.Sprintf("Failed to start | %v", err))
-		logger.Print()
+		logrus.Fatalf("Failed to start | %v", err)
 		return
 	}
 
 	cache := app.GetCachePool()
 	cacheConn, err := cache.Dial()
 	if err != nil {
-		logger.AddMessage(log.FatalLevel, fmt.Sprintf("Failed to start | %v", err))
-		logger.Print()
+		logrus.Fatalf("Failed to start | %v", err)
 		return
 	}
 	defer cacheConn.Close()
 
+	dlOpt := distlock.Option{
+		RedisLockerTries:      cfg.GetInt("redis.locker_tries"),
+		RedisLockerRetryDelay: cfg.GetDuration("redis.locker_retry_delay"),
+		RedisLockerExpiry:     cfg.GetDuration("redis.locker_expiry"),
+	}
+	cacheDistLock := distlock.New(cache, dlOpt)
+
 	repo := wiringRepository(repository.Option{
-		DbMysql:   dbMysql,
-		DbPostgre: dbPostgre,
-		CachePool: cache,
+		DbMysql:       dbMysql,
+		DbPostgre:     dbPostgre,
+		CachePool:     cache,
+		CacheDistLock: cacheDistLock,
 	})
 
 	service := wiringService(service.Option{
-		DbMysql:   dbMysql,
-		DbPostgre: dbPostgre,
-		CachePool: cache,
-		Repo:      repo,
+		DbMysql:       dbMysql,
+		DbPostgre:     dbPostgre,
+		CachePool:     cache,
+		CacheDistLock: cacheDistLock,
+		Repo:          repo,
 	})
 
+	server := server.NewServer(cfg, service, dbMysql, dbPostgre, cache, logger)
+
 	// run metric
-	loggerM := log.NewLogger("go-bootstrap-metric")
-	serverM := server.NewServer(cfg, service, dbMysql, dbPostgre, cache, loggerM)
-	go serverM.StartMetric()
+	go server.StartMetric()
 
 	// run app
-	serverA := server.NewServer(cfg, service, dbMysql, dbPostgre, cache, logger)
-	serverA.StartApp()
+	server.StartApp()
 }
 
 func wiringRepository(repoOption repository.Option) *repository.Repository {

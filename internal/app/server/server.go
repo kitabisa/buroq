@@ -11,8 +11,9 @@ import (
 	"github.com/gomodule/redigo/redis"
 	"github.com/kitabisa/go-bootstrap/config"
 	"github.com/kitabisa/go-bootstrap/internal/app/service"
-	plog "github.com/kitabisa/perkakas/v2/log"
+	"github.com/kitabisa/perkakas/v2/log"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/sirupsen/logrus"
 	"gopkg.in/gorp.v2"
 )
 
@@ -28,11 +29,11 @@ type server struct {
 	dbMysql   *gorp.DbMap
 	dbPostgre *gorp.DbMap
 	cachePool *redis.Pool
-	logger    *plog.Logger
+	logger    *log.Logger
 }
 
 // NewServer create object server
-func NewServer(config config.Provider, service *service.Service, dbMysql *gorp.DbMap, dbPostgre *gorp.DbMap, cachePool *redis.Pool, logger *plog.Logger) IServer {
+func NewServer(config config.Provider, service *service.Service, dbMysql *gorp.DbMap, dbPostgre *gorp.DbMap, cachePool *redis.Pool, logger *log.Logger) IServer {
 	return &server{
 		config:    config,
 		service:   service,
@@ -51,14 +52,12 @@ func (s *server) StartApp() {
 		signal.Notify(sigint, os.Interrupt)
 		<-sigint
 
-		s.logger.AddMessage(plog.InfoLevel, "[API] Server is shutting down")
-		s.logger.Print()
+		logrus.Infoln("[API] Server is shutting down")
 
 		// We received an interrupt signal, shut down.
 		if err := srv.Shutdown(context.Background()); err != nil {
 			// Error from closing listeners, or context timeout:
-			s.logger.AddMessage(plog.InfoLevel, fmt.Sprintf("[API] Fail to shutting down: %v", err))
-			s.logger.Print()
+			logrus.Infof("[API] Fail to shutting down: %v", err)
 		}
 		close(idleConnectionClosed)
 	}()
@@ -66,19 +65,15 @@ func (s *server) StartApp() {
 	srv.Addr = fmt.Sprintf("%s:%d", s.config.GetString("app.host"), s.config.GetInt("app.port"))
 	srv.Handler = Router(s.service, s.dbMysql, s.dbPostgre, s.cachePool, s.logger)
 
-	s.logger.AddMessage(plog.InfoLevel, fmt.Sprintf("[API] HTTP serve at %s\n", srv.Addr))
-	s.logger.Print()
+	logrus.Infof("[API] HTTP serve at %s\n", srv.Addr)
 
 	if err := srv.ListenAndServe(); err != http.ErrServerClosed {
 		// Error starting or closing listener:
-		s.logger.AddMessage(plog.InfoLevel, fmt.Sprintf("[API] Fail to start listen and server: %v", err))
-		s.logger.Print()
+		logrus.Infof("[API] Fail to start listen and server: %v", err)
 	}
 
 	<-idleConnectionClosed
-
-	s.logger.AddMessage(plog.InfoLevel, "[API] Bye")
-	s.logger.Print()
+	logrus.Infoln("[API] Bye")
 }
 
 func (s *server) StartMetric() {
@@ -92,14 +87,12 @@ func (s *server) StartMetric() {
 		signal.Notify(sigint, os.Interrupt)
 		<-sigint
 
-		s.logger.AddMessage(plog.InfoLevel, "[Metric] Server is shutting down")
-		s.logger.Print()
+		logrus.Infoln("[Metric] Server is shutting down")
 
 		// We received an interrupt signal, shut down.
 		if err := srv.Shutdown(context.Background()); err != nil {
 			// Error from closing listeners, or context timeout:
-			s.logger.AddMessage(plog.InfoLevel, fmt.Sprintf("[Metric] Fail to shutting down: %v", err))
-			s.logger.Print()
+			logrus.Infof("[Metric] Fail to shutting down: %v", err)
 		}
 		close(idleConnectionClosed)
 	}()
@@ -107,17 +100,13 @@ func (s *server) StartMetric() {
 	srv.Addr = fmt.Sprintf("%s:%d", s.config.GetString("app.host"), s.config.GetInt("metric.port"))
 	srv.Handler = chiMux
 
-	s.logger.AddMessage(plog.InfoLevel, fmt.Sprintf("[Metric] HTTP serve at %s\n", srv.Addr))
-	s.logger.Print()
+	logrus.Infof("[Metric] HTTP serve at %s\n", srv.Addr)
 
 	if err := srv.ListenAndServe(); err != http.ErrServerClosed {
 		// Error starting or closing listener:
-		s.logger.AddMessage(plog.InfoLevel, fmt.Sprintf("[Metric] Fail to start listen and server: %v", err))
-		s.logger.Print()
+		logrus.Infof("[Metric] Fail to start listen and server: %v", err)
 	}
 
 	<-idleConnectionClosed
-
-	s.logger.AddMessage(plog.InfoLevel, "[Metric] Bye")
-	s.logger.Print()
+	logrus.Infoln("[Metric] Bye")
 }

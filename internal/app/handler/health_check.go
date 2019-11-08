@@ -7,14 +7,16 @@ import (
 )
 
 // HealthCheck checking if all work well
-func (h *Handler) HealthCheck(w http.ResponseWriter, r *http.Request) {
-	err, rc := h.services.HealthCheck.HealthCheck()
+func (h *Handler) HealthCheck() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		err, rc := h.services.HealthCheck.HealthCheck()
 
-	if err != nil {
-		h.WriteResponse(w, http.StatusInternalServerError, rc, nil, nil)
+		if err != nil {
+			h.WriteResponse(w, http.StatusInternalServerError, rc, nil, nil)
+			return
+		}
+
+		h.WriteResponse(w, http.StatusOK, commons.RCSuccess, nil, nil)
 		return
 	}
-
-	h.WriteResponse(w, http.StatusOK, commons.RCSuccess, nil, nil)
-	return
 }
