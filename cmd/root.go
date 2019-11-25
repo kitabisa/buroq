@@ -86,7 +86,7 @@ func start() {
 		Repo:          repo,
 	})
 
-	server := server.NewServer(cfg, service, dbMysql, dbPostgre, cache, logger)
+	server := server.NewServer(cfg, service, dbMysql, dbPostgre, cache, cacheDistLock, logger)
 
 	// run metric
 	go server.StartMetric()
@@ -99,6 +99,8 @@ func wiringRepository(repoOption repository.Option) *repository.Repository {
 	repo := repository.NewRepository()
 
 	// wiring up all your repos here
+	cacheRepo := repository.NewCacheRepository(repoOption.CachePool)
+	repo.SetCacheRepo(cacheRepo)
 
 	return repo
 }

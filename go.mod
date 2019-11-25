@@ -9,6 +9,7 @@ require (
 	github.com/gobuffalo/packr v1.30.1 // indirect
 	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/gorilla/mux v1.7.3
+	github.com/im7mortal/kmutex v1.0.0
 	github.com/jinzhu/gorm v1.9.11
 	github.com/kitabisa/perkakas v1.1.6
 	github.com/kitabisa/perkakas/v2 v2.7.0

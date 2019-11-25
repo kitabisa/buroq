@@ -10,6 +10,7 @@ import (
 	"github.com/kitabisa/go-bootstrap/config"
 	"github.com/kitabisa/go-bootstrap/internal/app/service"
 	"github.com/kitabisa/go-bootstrap/version"
+	"github.com/kitabisa/perkakas/v2/distlock"
 	"github.com/kitabisa/perkakas/v2/log"
 	"gopkg.in/gorp.v2"
 )
@@ -37,23 +38,25 @@ type ResponseMeta struct {
 }
 
 type Handler struct {
-	config    config.Provider
-	services  *service.Service
-	dbMysql   *gorp.DbMap
-	dbPostgre *gorp.DbMap
-	cachePool *redis.Pool
-	logger    *log.Logger
+	config        config.Provider
+	services      *service.Service
+	dbMysql       *gorp.DbMap
+	dbPostgre     *gorp.DbMap
+	cachePool     *redis.Pool
+	cacheDistLock *distlock.DistLock
+	logger        *log.Logger
 }
 
-func NewHandler(svc *service.Service, dbMysql *gorp.DbMap, dbPostgre *gorp.DbMap, cachePool *redis.Pool, logger *log.Logger) *Handler {
+func NewHandler(svc *service.Service, dbMysql *gorp.DbMap, dbPostgre *gorp.DbMap, cachePool *redis.Pool, cacheDistLock *distlock.DistLock, logger *log.Logger) *Handler {
 	cfg := config.Config()
 	return &Handler{
-		config:    cfg,
-		services:  svc,
-		dbMysql:   dbMysql,
-		dbPostgre: dbPostgre,
-		cachePool: cachePool,
-		logger:    logger,
+		config:        cfg,
+		services:      svc,
+		dbMysql:       dbMysql,
+		dbPostgre:     dbPostgre,
+		cachePool:     cachePool,
+		cacheDistLock: cacheDistLock,
+		logger:        logger,
 	}
 }
 

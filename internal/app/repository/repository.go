@@ -19,6 +19,7 @@ type Option struct {
 // Repository all repo object injected here
 type Repository struct {
 	// User IUserRepository
+	Cache ICacheRepo
 }
 
 // NewRepository preparing empty object of Repo
@@ -33,3 +34,8 @@ func (r *Repository) SetUserRepository(userRepository IUserRepository) {
 	r.User = userRepository
 }
 */
+
+// SetCacheRepo Set Cache Repository to Repository collection
+func (r *Repository) SetCacheRepo(cacheRepo ICacheRepo) {
+	r.Cache = cacheRepo
+}

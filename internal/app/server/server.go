@@ -11,6 +11,7 @@ import (
 	"github.com/gomodule/redigo/redis"
 	"github.com/kitabisa/go-bootstrap/config"
 	"github.com/kitabisa/go-bootstrap/internal/app/service"
+	"github.com/kitabisa/perkakas/v2/distlock"
 	"github.com/kitabisa/perkakas/v2/log"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/sirupsen/logrus"
@@ -24,23 +25,25 @@ type IServer interface {
 }
 
 type server struct {
-	config    config.Provider
-	service   *service.Service
-	dbMysql   *gorp.DbMap
-	dbPostgre *gorp.DbMap
-	cachePool *redis.Pool
-	logger    *log.Logger
+	config        config.Provider
+	service       *service.Service
+	dbMysql       *gorp.DbMap
+	dbPostgre     *gorp.DbMap
+	cachePool     *redis.Pool
+	cacheDistLock *distlock.DistLock
+	logger        *log.Logger
 }
 
 // NewServer create object server
-func NewServer(config config.Provider, service *service.Service, dbMysql *gorp.DbMap, dbPostgre *gorp.DbMap, cachePool *redis.Pool, logger *log.Logger) IServer {
+func NewServer(config config.Provider, service *service.Service, dbMysql *gorp.DbMap, dbPostgre *gorp.DbMap, cachePool *redis.Pool, cacheDistLock *distlock.DistLock, logger *log.Logger) IServer {
 	return &server{
-		config:    config,
-		service:   service,
-		dbMysql:   dbMysql,
-		dbPostgre: dbPostgre,
-		cachePool: cachePool,
-		logger:    logger,
+		config:        config,
+		service:       service,
+		dbMysql:       dbMysql,
+		dbPostgre:     dbPostgre,
+		cachePool:     cachePool,
+		cacheDistLock: cacheDistLock,
+		logger:        logger,
 	}
 }
 
@@ -63,7 +66,7 @@ func (s *server) StartApp() {
 	}()
 
 	srv.Addr = fmt.Sprintf("%s:%d", s.config.GetString("app.host"), s.config.GetInt("app.port"))
-	srv.Handler = Router(s.service, s.dbMysql, s.dbPostgre, s.cachePool, s.logger)
+	srv.Handler = Router(s.config, s.service, s.dbMysql, s.dbPostgre, s.cachePool, s.cacheDistLock, s.logger)
 
 	logrus.Infof("[API] HTTP serve at %s\n", srv.Addr)
 
