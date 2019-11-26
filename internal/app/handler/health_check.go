@@ -2,21 +2,29 @@ package handler
 
 import (
 	"net/http"
-
-	"github.com/kitabisa/go-bootstrap/internal/pkg/commons"
 )
 
+type HealthCheckHandler struct {
+	HandlerOption
+	http.Handler
+}
+
 // HealthCheck checking if all work well
-func (h *Handler) HealthCheck() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		err, rc := h.services.HealthCheck.HealthCheck()
-
-		if err != nil {
-			h.WriteResponse(w, http.StatusInternalServerError, rc, nil, nil)
-			return
-		}
-
-		h.WriteResponse(w, http.StatusOK, commons.RCSuccess, nil, nil)
+func (h HealthCheckHandler) HealthCheck(w http.ResponseWriter, r *http.Request) (data interface{}, pageToken *string, err error) {
+	err = h.Services.HealthCheck.HealthCheckDbMysql()
+	if err != nil {
 		return
 	}
+
+	err = h.Services.HealthCheck.HealthCheckDbPostgres()
+	if err != nil {
+		return
+	}
+
+	err = h.Services.HealthCheck.HealthCheckDbCache()
+	if err != nil {
+		return
+	}
+
+	return
 }

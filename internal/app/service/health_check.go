@@ -1,50 +1,53 @@
 package service
 
 import (
-	"fmt"
-
 	"github.com/kitabisa/go-bootstrap/internal/pkg/commons"
+	"github.com/kitabisa/perkakas/v2/log"
 )
 
 type IHealthCheck interface {
-	HealthCheck() (err error, rc int)
+	HealthCheckDbMysql() (err error)
+	HealthCheckDbPostgres() (err error)
+	HealthCheckDbCache() (err error)
 }
 
 type healthCheck struct {
-	option Option
+	Option
 }
 
 func NewHealthCheck(option Option) IHealthCheck {
 	return &healthCheck{
-		option: option,
+		option,
 	}
 }
 
-func (h *healthCheck) HealthCheck() (err error, rc int) {
-	err = h.option.DbMysql.Db.Ping()
+func (h *healthCheck) HealthCheckDbMysql() (err error) {
+	err = h.DbMysql.Db.Ping()
 	if err != nil {
-		// TODO: logging
-		fmt.Println(err)
-		rc = commons.RCDBConnectionError
-		return
+		h.Logger.AddMessage(log.FatalLevel, err.Error()).Print()
+		err = commons.ErrDBConn
 	}
+	return
+}
 
-	err = h.option.DbPostgre.Db.Ping()
+func (h *healthCheck) HealthCheckDbPostgres() (err error) {
+	err = h.DbPostgre.Db.Ping()
 	if err != nil {
-		// TODO: logging
-		fmt.Println(err)
-		rc = commons.RCDBConnectionError
-		return
+		h.Logger.AddMessage(log.FatalLevel, err.Error()).Print()
+		err = commons.ErrDBConn
 	}
+	return
+}
 
-	cacheConn := h.option.CachePool.Get()
+func (h *healthCheck) HealthCheckDbCache() (err error) {
+	cacheConn := h.CachePool.Get()
 	_, err = cacheConn.Do("PING")
 	if err != nil {
-		// TODO: logging
-		rc = commons.RCCacheConnectionError
+		h.Logger.AddMessage(log.FatalLevel, err.Error()).Print()
+		err = commons.ErrCacheConn
 		return
 	}
 	defer cacheConn.Close()
 
-	return nil, commons.RCSuccess
+	return nil
 }

@@ -9,7 +9,6 @@ import (
 	"github.com/kitabisa/go-bootstrap/internal/app/server"
 	"github.com/kitabisa/go-bootstrap/internal/app/service"
 	"github.com/kitabisa/go-bootstrap/internal/pkg/appcontext"
-	"github.com/kitabisa/perkakas/v2/distlock"
 	"github.com/kitabisa/perkakas/v2/log"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -64,29 +63,22 @@ func start() {
 	}
 	defer cacheConn.Close()
 
-	dlOpt := distlock.Option{
-		RedisLockerTries:      cfg.GetInt("redis.locker_tries"),
-		RedisLockerRetryDelay: cfg.GetDuration("redis.locker_retry_delay"),
-		RedisLockerExpiry:     cfg.GetDuration("redis.locker_expiry"),
-	}
-	cacheDistLock := distlock.New(cache, dlOpt)
-
 	repo := wiringRepository(repository.Option{
-		DbMysql:       dbMysql,
-		DbPostgre:     dbPostgre,
-		CachePool:     cache,
-		CacheDistLock: cacheDistLock,
+		DbMysql:   dbMysql,
+		DbPostgre: dbPostgre,
+		CachePool: cache,
+		Logger:    logger,
 	})
 
 	service := wiringService(service.Option{
-		DbMysql:       dbMysql,
-		DbPostgre:     dbPostgre,
-		CachePool:     cache,
-		CacheDistLock: cacheDistLock,
-		Repo:          repo,
+		DbMysql:   dbMysql,
+		DbPostgre: dbPostgre,
+		CachePool: cache,
+		Logger:    logger,
+		Repo:      repo,
 	})
 
-	server := server.NewServer(cfg, service, dbMysql, dbPostgre, cache, cacheDistLock, logger)
+	server := server.NewServer(cfg, service, dbMysql, dbPostgre, cache, logger)
 
 	// run metric
 	go server.StartMetric()

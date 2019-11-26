@@ -2,7 +2,6 @@ package repository
 
 import (
 	"github.com/gomodule/redigo/redis"
-	"github.com/kitabisa/perkakas/v2/distlock"
 	"github.com/kitabisa/perkakas/v2/log"
 	"gopkg.in/gorp.v2"
 )
@@ -12,7 +11,6 @@ type Option struct {
 	DbMysql       *gorp.DbMap
 	DbPostgre     *gorp.DbMap
 	CachePool     *redis.Pool
-	CacheDistLock *distlock.DistLock
 	Logger        *log.Logger
 }
 

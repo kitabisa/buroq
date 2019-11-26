@@ -3,17 +3,17 @@ package service
 import (
 	"github.com/gomodule/redigo/redis"
 	"github.com/kitabisa/go-bootstrap/internal/app/repository"
-	"github.com/kitabisa/perkakas/v2/distlock"
+	"github.com/kitabisa/perkakas/v2/log"
 	"gopkg.in/gorp.v2"
 )
 
 // Option anything any service object needed
 type Option struct {
-	DbMysql       *gorp.DbMap
-	DbPostgre     *gorp.DbMap
-	CachePool     *redis.Pool
-	CacheDistLock *distlock.DistLock
-	Repo          *repository.Repository
+	DbMysql   *gorp.DbMap
+	DbPostgre *gorp.DbMap
+	CachePool *redis.Pool
+	Repo      *repository.Repository
+	Logger    *log.Logger
 }
 
 // Service all service object injected here
