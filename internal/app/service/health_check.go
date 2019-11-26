@@ -5,6 +5,7 @@ import (
 	"github.com/kitabisa/perkakas/v2/log"
 )
 
+// IHealthCheck interface for health check service
 type IHealthCheck interface {
 	HealthCheckDbMysql() (err error)
 	HealthCheckDbPostgres() (err error)
@@ -15,6 +16,7 @@ type healthCheck struct {
 	Option
 }
 
+// NewHealthCheck create health check service instance with option as param
 func NewHealthCheck(option Option) IHealthCheck {
 	return &healthCheck{
 		option,
