@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/kitabisa/go-bootstrap/config"
-	"github.com/kitabisa/go-bootstrap/internal/pkg/appcontext"
+	"github.com/kitabisa/go-bootstrap/internal/app/appcontext"
 	"github.com/kitabisa/perkakas/v2/log"
 	migrate "github.com/rubenv/sql-migrate"
 	"github.com/spf13/cobra"

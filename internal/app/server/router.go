@@ -7,7 +7,7 @@ import (
 	"github.com/kitabisa/go-bootstrap/config"
 	"github.com/kitabisa/go-bootstrap/internal/app/handler"
 	"github.com/kitabisa/go-bootstrap/internal/app/service"
-	"github.com/kitabisa/go-bootstrap/internal/pkg/commons"
+	"github.com/kitabisa/go-bootstrap/internal/app/commons"
 	"github.com/kitabisa/go-bootstrap/version"
 	phttp "github.com/kitabisa/perkakas/v2/http"
 	"github.com/kitabisa/perkakas/v2/log"

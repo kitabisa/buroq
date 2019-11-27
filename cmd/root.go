@@ -8,7 +8,7 @@ import (
 	"github.com/kitabisa/go-bootstrap/internal/app/repository"
 	"github.com/kitabisa/go-bootstrap/internal/app/server"
 	"github.com/kitabisa/go-bootstrap/internal/app/service"
-	"github.com/kitabisa/go-bootstrap/internal/pkg/appcontext"
+	"github.com/kitabisa/go-bootstrap/internal/app/appcontext"
 	"github.com/kitabisa/perkakas/v2/log"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"

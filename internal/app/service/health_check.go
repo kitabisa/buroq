@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/kitabisa/go-bootstrap/internal/pkg/commons"
+	"github.com/kitabisa/go-bootstrap/internal/app/commons"
 	"github.com/kitabisa/perkakas/v2/log"
 )
 

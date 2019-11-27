@@ -5,19 +5,24 @@ import (
 
 	"github.com/gomodule/redigo/redis"
 	"github.com/kitabisa/go-bootstrap/config"
-	"github.com/kitabisa/go-bootstrap/internal/pkg/driver"
+	"github.com/kitabisa/go-bootstrap/internal/app/driver"
 	"gopkg.in/gorp.v2"
 )
 
 const (
-	DBDialectMysql    = "mysql"
+	// DBDialectMysql rdbms dialect name for MySQL
+	DBDialectMysql = "mysql"
+
+	// DBDialectPostgres rdbms dialect name for PostgreSQL
 	DBDialectPostgres = "postgres"
 )
 
+// AppContext the app context struct
 type AppContext struct {
 	config config.Provider
 }
 
+// NewAppContext initiate appcontext object
 func NewAppContext(config config.Provider) *AppContext {
 	return &AppContext{
 		config: config,
@@ -67,6 +72,7 @@ func (a *AppContext) getPostgreOption() driver.DBPostgreOption {
 	}
 }
 
+// GetCachePool get cache pool connection
 func (a *AppContext) GetCachePool() *redis.Pool {
 	return driver.NewRedis(a.getCacheOption())
 }
