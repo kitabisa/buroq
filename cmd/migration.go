@@ -47,7 +47,7 @@ func init() {
 
 func getMigrateSource() migrate.FileMigrationSource {
 	source := migrate.FileMigrationSource{
-		Dir: "migrations",
+		Dir: "migrations/sql",
 	}
 
 	return source
