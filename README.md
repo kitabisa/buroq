@@ -14,8 +14,9 @@ just build it and run. `localhost:[port]/health_check` will give you HTTP status
 
 ## Migration
 * using [sql-migrate](https://github.com/rubenv/sql-migrate)
-* how to fill the query for migration see on `migrations/sql/yyyymmddhhmmss_migrate_file.sql`
-* command: `migrate` for migrate up, `migratedown` for migrate down
+* command: `migrate` for migrate up
+* command: `migratedown` for migrate down
+* command: `migratenew [migration name]` for create migration file
 
 ## Seeding (Work in progress)
 * seeds for starter can be put on `migrations/seeds/{number}.{table-name}.sql`
