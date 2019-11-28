@@ -96,21 +96,23 @@ func start() {
 }
 
 func wiringRepository(repoOption repository.Option) *repository.Repository {
-	repo := repository.NewRepository()
-
 	// wiring up all your repos here
 	cacheRepo := repository.NewCacheRepository(repoOption.CachePool)
-	repo.SetCacheRepo(cacheRepo)
 
-	return repo
+	repo := repository.Repository{
+		Cache: cacheRepo,
+	}
+
+	return &repo
 }
 
 func wiringService(serviceOption service.Option) *service.Service {
-	svc := service.NewService()
-
 	// wiring up all services
 	hc := service.NewHealthCheck(serviceOption)
-	svc.SetHealthCheckService(hc)
 
-	return svc
+	svc := service.Service{
+		HealthCheck: hc,
+	}
+
+	return &svc
 }

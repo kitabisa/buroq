@@ -22,13 +22,3 @@ type Option struct {
 type Service struct {
 	HealthCheck IHealthCheck
 }
-
-// NewService preparing empty object of Service
-func NewService() *Service {
-	return &Service{}
-}
-
-// SetHealthCheckService set health check service
-func (s *Service) SetHealthCheckService(hc IHealthCheck) {
-	s.HealthCheck = hc
-}

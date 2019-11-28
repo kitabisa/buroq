@@ -1,8 +1,12 @@
 package service
 
 import (
+	"github.com/gomodule/redigo/redis"
 	"github.com/kitabisa/go-bootstrap/internal/app/commons"
+	"github.com/kitabisa/go-bootstrap/internal/app/repository"
 	"github.com/kitabisa/perkakas/v2/log"
+	"github.com/kitabisa/perkakas/v2/metrics/influx"
+	"gopkg.in/gorp.v2"
 )
 
 // IHealthCheck interface for health check service
@@ -14,39 +18,49 @@ type IHealthCheck interface {
 }
 
 type healthCheck struct {
-	Option
+	Repo      *repository.Repository
+	dbMysql   *gorp.DbMap
+	dbPostgre *gorp.DbMap
+	cachePool *redis.Pool
+	influx    *influx.Client
+	logger    *log.Logger
 }
 
 // NewHealthCheck create health check service instance with option as param
 func NewHealthCheck(option Option) IHealthCheck {
 	return &healthCheck{
-		option,
+		Repo:      option.Repo,
+		dbMysql:   option.DbMysql,
+		dbPostgre: option.DbPostgre,
+		cachePool: option.CachePool,
+		influx:    option.Influx,
+		logger:    option.Logger,
 	}
 }
 
 func (h *healthCheck) HealthCheckDbMysql() (err error) {
-	err = h.DbMysql.Db.Ping()
+	err = h.dbMysql.Db.Ping()
 	if err != nil {
-		h.Logger.AddMessage(log.FatalLevel, err.Error()).Print()
+		h.logger.AddMessage(log.FatalLevel, err.Error()).Print()
 		err = commons.ErrDBConn
 	}
 	return
 }
 
 func (h *healthCheck) HealthCheckDbPostgres() (err error) {
-	err = h.DbPostgre.Db.Ping()
+	err = h.dbPostgre.Db.Ping()
 	if err != nil {
-		h.Logger.AddMessage(log.FatalLevel, err.Error()).Print()
+		h.logger.AddMessage(log.FatalLevel, err.Error()).Print()
 		err = commons.ErrDBConn
 	}
 	return
 }
 
 func (h *healthCheck) HealthCheckDbCache() (err error) {
-	cacheConn := h.CachePool.Get()
+	cacheConn := h.cachePool.Get()
 	_, err = cacheConn.Do("PING")
 	if err != nil {
-		h.Logger.AddMessage(log.FatalLevel, err.Error()).Print()
+		h.logger.AddMessage(log.FatalLevel, err.Error()).Print()
 		err = commons.ErrCacheConn
 		return
 	}
@@ -56,9 +70,9 @@ func (h *healthCheck) HealthCheckDbCache() (err error) {
 }
 
 func (h *healthCheck) HealthCheckInflux() (err error) {
-	err = h.Influx.Ping()
+	err = h.influx.Ping()
 	if err != nil {
-		h.Logger.AddMessage(log.FatalLevel, err.Error()).Print()
+		h.logger.AddMessage(log.FatalLevel, err.Error()).Print()
 		err = commons.ErrInfluxConn
 	}
 
