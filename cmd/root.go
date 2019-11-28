@@ -5,10 +5,10 @@ import (
 	"os"
 
 	"github.com/kitabisa/go-bootstrap/config"
+	"github.com/kitabisa/go-bootstrap/internal/app/appcontext"
 	"github.com/kitabisa/go-bootstrap/internal/app/repository"
 	"github.com/kitabisa/go-bootstrap/internal/app/server"
 	"github.com/kitabisa/go-bootstrap/internal/app/service"
-	"github.com/kitabisa/go-bootstrap/internal/app/appcontext"
 	"github.com/kitabisa/perkakas/v2/log"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -45,28 +45,35 @@ func start() {
 	app := appcontext.NewAppContext(cfg)
 	dbMysql, err := app.GetDBInstance(appcontext.DBDialectMysql)
 	if err != nil {
-		logrus.Fatalf("Failed to start | %v", err)
+		logrus.Fatalf("Failed to start, error connect to DB MySQL | %v", err)
 		return
 	}
 
 	dbPostgre, err := app.GetDBInstance(appcontext.DBDialectPostgres)
 	if err != nil {
-		logrus.Fatalf("Failed to start | %v", err)
+		logrus.Fatalf("Failed to start, error connect to DB Postgre | %v", err)
 		return
 	}
 
 	cache := app.GetCachePool()
 	cacheConn, err := cache.Dial()
 	if err != nil {
-		logrus.Fatalf("Failed to start | %v", err)
+		logrus.Fatalf("Failed to start, error connect to DB Cache | %v", err)
 		return
 	}
 	defer cacheConn.Close()
+
+	influx, err := app.GetInfluxDBClient()
+	if err != nil {
+		logrus.Fatalf("Failed to start, error connect to DB Influx | %v", err)
+		return
+	}
 
 	repo := wiringRepository(repository.Option{
 		DbMysql:   dbMysql,
 		DbPostgre: dbPostgre,
 		CachePool: cache,
+		Influx:    influx,
 		Logger:    logger,
 	})
 
@@ -74,6 +81,7 @@ func start() {
 		DbMysql:   dbMysql,
 		DbPostgre: dbPostgre,
 		CachePool: cache,
+		Influx:    influx,
 		Logger:    logger,
 		Repo:      repo,
 	})
@@ -102,7 +110,7 @@ func wiringService(serviceOption service.Option) *service.Service {
 
 	// wiring up all services
 	hc := service.NewHealthCheck(serviceOption)
-	svc.HealthCheck = hc
+	svc.SetHealthCheckService(hc)
 
 	return svc
 }

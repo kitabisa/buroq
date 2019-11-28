@@ -6,6 +6,7 @@ import (
 	"github.com/gomodule/redigo/redis"
 	"github.com/kitabisa/go-bootstrap/config"
 	"github.com/kitabisa/go-bootstrap/internal/app/driver"
+	"github.com/kitabisa/perkakas/v2/metrics/influx"
 	"gopkg.in/gorp.v2"
 )
 
@@ -74,22 +75,37 @@ func (a *AppContext) getPostgreOption() driver.DBPostgreOption {
 
 // GetCachePool get cache pool connection
 func (a *AppContext) GetCachePool() *redis.Pool {
-	return driver.NewRedis(a.getCacheOption())
+	return driver.NewCache(a.getCacheOption())
 }
 
-func (a *AppContext) getCacheOption() driver.RedisOption {
-	return driver.RedisOption{
-		Host:               a.config.GetString("redis.host"),
-		Port:               a.config.GetInt("redis.port"),
-		Namespace:          a.config.GetString("redis.namespace"),
-		Password:           a.config.GetString("redis.password"),
-		DialConnectTimeout: a.config.GetDuration("redis.dial_connect_timeout"),
-		ReadTimeout:        a.config.GetDuration("redis.read_timeout"),
-		WriteTimeout:       a.config.GetDuration("redis.write_timeout"),
-		IdleTimeout:        a.config.GetDuration("redis.idle_timeout"),
-		MaxConnLifetime:    a.config.GetDuration("redis.conn_lifetime_max"),
-		MaxIdle:            a.config.GetInt("redis.conn_idle_max"),
-		MaxActive:          a.config.GetInt("redis.conn_active_max"),
-		Wait:               a.config.GetBool("redis.is_wait"),
+func (a *AppContext) getCacheOption() driver.CacheOption {
+	return driver.CacheOption{
+		Host:               a.config.GetString("cache.host"),
+		Port:               a.config.GetInt("cache.port"),
+		Namespace:          a.config.GetString("cache.namespace"),
+		Password:           a.config.GetString("cache.password"),
+		DialConnectTimeout: a.config.GetDuration("cache.dial_connect_timeout"),
+		ReadTimeout:        a.config.GetDuration("cache.read_timeout"),
+		WriteTimeout:       a.config.GetDuration("cache.write_timeout"),
+		IdleTimeout:        a.config.GetDuration("cache.idle_timeout"),
+		MaxConnLifetime:    a.config.GetDuration("cache.conn_lifetime_max"),
+		MaxIdle:            a.config.GetInt("cache.conn_idle_max"),
+		MaxActive:          a.config.GetInt("cache.conn_active_max"),
+		Wait:               a.config.GetBool("cache.is_wait"),
 	}
+}
+
+// GetInfluxDBClient get Influx DB client
+func (a *AppContext) GetInfluxDBClient() (c *influx.Client, err error) {
+	influxConfig := influx.ClientConfig{
+		Addr:               a.config.GetString("influx.host"),
+		Username:           a.config.GetString("influx.user"),
+		Password:           a.config.GetString("influx.pass"),
+		Database:           a.config.GetString("influx.name"),
+		RetentionPolicy:    a.config.GetString("influx.retention_policy"),
+		Timeout:            a.config.GetDuration("influx.timeout"),
+		InsecureSkipVerify: a.config.GetBool("influx.insecure_skip_verify"),
+	}
+
+	return influx.NewClient(influxConfig)
 }

@@ -4,6 +4,7 @@ import (
 	"github.com/gomodule/redigo/redis"
 	"github.com/kitabisa/go-bootstrap/internal/app/repository"
 	"github.com/kitabisa/perkakas/v2/log"
+	"github.com/kitabisa/perkakas/v2/metrics/influx"
 	"gopkg.in/gorp.v2"
 )
 
@@ -13,6 +14,7 @@ type Option struct {
 	DbPostgre *gorp.DbMap
 	CachePool *redis.Pool
 	Repo      *repository.Repository
+	Influx    *influx.Client
 	Logger    *log.Logger
 }
 
@@ -26,10 +28,7 @@ func NewService() *Service {
 	return &Service{}
 }
 
-// TODO: set function for each service
-// eg
-/*
-func (s *Service) SetUserService(userService IUserService) {
-	s.User = userService
+// SetHealthCheckService set health check service
+func (s *Service) SetHealthCheckService(hc IHealthCheck) {
+	s.HealthCheck = hc
 }
-*/

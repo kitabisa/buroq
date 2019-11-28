@@ -10,6 +10,7 @@ type IHealthCheck interface {
 	HealthCheckDbMysql() (err error)
 	HealthCheckDbPostgres() (err error)
 	HealthCheckDbCache() (err error)
+	HealthCheckInflux() (err error)
 }
 
 type healthCheck struct {
@@ -52,4 +53,14 @@ func (h *healthCheck) HealthCheckDbCache() (err error) {
 	defer cacheConn.Close()
 
 	return nil
+}
+
+func (h *healthCheck) HealthCheckInflux() (err error) {
+	err = h.Influx.Ping()
+	if err != nil {
+		h.Logger.AddMessage(log.FatalLevel, err.Error()).Print()
+		err = commons.ErrInfluxConn
+	}
+
+	return
 }

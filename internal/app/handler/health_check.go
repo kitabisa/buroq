@@ -26,5 +26,10 @@ func (h HealthCheckHandler) HealthCheck(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
+	err = h.Services.HealthCheck.HealthCheckInflux()
+	if err != nil {
+		return
+	}
+
 	return
 }

@@ -7,7 +7,8 @@ import (
 	"github.com/gomodule/redigo/redis"
 )
 
-type RedisOption struct {
+// CacheOption properties for cache DB
+type CacheOption struct {
 	Host               string
 	Port               int
 	DialConnectTimeout time.Duration
@@ -22,8 +23,8 @@ type RedisOption struct {
 	Namespace          string
 }
 
-// NewRedis create redis pool
-func NewRedis(option RedisOption) *redis.Pool {
+// NewCache create cache pool
+func NewCache(option CacheOption) *redis.Pool {
 	dialConnectTimeoutOption := redis.DialConnectTimeout(option.DialConnectTimeout)
 	readTimeoutOption := redis.DialReadTimeout(option.ReadTimeout)
 	writeTimeoutOption := redis.DialWriteTimeout(option.WriteTimeout)
