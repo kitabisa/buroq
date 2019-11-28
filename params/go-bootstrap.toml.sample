@@ -1,0 +1,64 @@
+[app]
+host = "0.0.0.0"
+port = 4500
+name = "go-bootstrap"
+secret = "any_secret"
+
+[metric]
+port = 4501
+
+[postgre]
+host = "your_db_host"
+port = 5432
+name = "your_db_name"
+username = "your_username"
+password = "your_password"
+pool_size = 5
+
+[mysql]
+host = "your_db_host"
+port = 3306
+name = "your_db_name"
+username = "your_username"
+password = "your_password"
+conn_open_max = 280 #maximum connection can be open
+conn_idle_max = 5 #maximum idle connection
+conn_lifetime_max = "0s" #maximum duration connection lifetime max
+additional_parameters = "charset=utf8&parseTime=True&loc=Asia%2fJakarta&time_zone=%27%2B07%3A00%27"
+
+[cache]
+host = "your_cache_host"
+port = 6379
+dial_connect_timeout = "5s"
+read_timeout = "5s"
+write_timeout = "5s"
+idle_timeout = "10s"
+conn_lifetime_max = "0s"
+conn_idle_max = 5
+conn_active_max = 1000
+is_wait = true
+namespace = "2"
+password = ""
+locker_tries = 1
+locker_retry_delay = "1s"
+locker_expiry = "5s"
+
+[influx]
+host = "your_influx_host"
+user = "your_username"
+pass = "your_password"
+name = "your_db_name"
+retention_policy = ""
+timeout = "5s"
+insecure_skip_verify = false
+
+[response_code]
+    [response_code.EN]
+        101001 = "Database connection error"
+        101002 = "Cache connection error"
+        101003 = "Influx connection error"
+
+    [response_code.ID]
+        101001 = "Error koneksi ke Database"
+        101002 = "Error koneksi ke Cache server"
+        101003 = "Error koneksi ke Influx"
