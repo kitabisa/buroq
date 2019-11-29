@@ -88,9 +88,6 @@ func start() {
 
 	server := server.NewServer(cfg, service, dbMysql, dbPostgre, cache, logger)
 
-	// run metric
-	go server.StartMetric()
-
 	// run app
 	server.StartApp()
 }

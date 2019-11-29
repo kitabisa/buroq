@@ -7,12 +7,10 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/go-chi/chi"
 	"github.com/gomodule/redigo/redis"
 	"github.com/kitabisa/go-bootstrap/config"
 	"github.com/kitabisa/go-bootstrap/internal/app/service"
 	"github.com/kitabisa/perkakas/v2/log"
-	"github.com/prometheus/client_golang/prometheus"
 	"github.com/sirupsen/logrus"
 	"gopkg.in/gorp.v2"
 )
@@ -20,7 +18,6 @@ import (
 // IServer interface for server
 type IServer interface {
 	StartApp()
-	StartMetric()
 }
 
 type server struct {
@@ -74,39 +71,4 @@ func (s *server) StartApp() {
 
 	<-idleConnectionClosed
 	logrus.Infoln("[API] Bye")
-}
-
-func (s *server) StartMetric() {
-	chiMux := chi.NewRouter()
-	chiMux.Get("/metrics", prometheus.Handler().ServeHTTP)
-
-	var srv http.Server
-	idleConnectionClosed := make(chan struct{})
-	go func() {
-		sigint := make(chan os.Signal, 1)
-		signal.Notify(sigint, os.Interrupt)
-		<-sigint
-
-		logrus.Infoln("[Metric] Server is shutting down")
-
-		// We received an interrupt signal, shut down.
-		if err := srv.Shutdown(context.Background()); err != nil {
-			// Error from closing listeners, or context timeout:
-			logrus.Infof("[Metric] Fail to shutting down: %v", err)
-		}
-		close(idleConnectionClosed)
-	}()
-
-	srv.Addr = fmt.Sprintf("%s:%d", s.config.GetString("app.host"), s.config.GetInt("metric.port"))
-	srv.Handler = chiMux
-
-	logrus.Infof("[Metric] HTTP serve at %s\n", srv.Addr)
-
-	if err := srv.ListenAndServe(); err != http.ErrServerClosed {
-		// Error starting or closing listener:
-		logrus.Infof("[Metric] Fail to start listen and server: %v", err)
-	}
-
-	<-idleConnectionClosed
-	logrus.Infoln("[Metric] Bye")
 }
