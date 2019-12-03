@@ -4,13 +4,10 @@ port = 4500
 name = "go-bootstrap"
 secret = "any_secret"
 
-[metric]
-port = 4501
-
 [postgre]
 host = "your_db_host"
 port = 5432
-name = "your_db_name"
+name = "go-bootstrap"
 username = "your_username"
 password = "your_password"
 pool_size = 5
@@ -18,7 +15,7 @@ pool_size = 5
 [mysql]
 host = "your_db_host"
 port = 3306
-name = "your_db_name"
+name = "go-bootstrap"
 username = "your_username"
 password = "your_password"
 conn_open_max = 280 #maximum connection can be open
@@ -47,7 +44,7 @@ locker_expiry = "5s"
 host = "your_influx_host"
 user = "your_username"
 pass = "your_password"
-name = "your_db_name"
+name = "go-bootstrap"
 retention_policy = ""
 timeout = "5s"
 insecure_skip_verify = false
