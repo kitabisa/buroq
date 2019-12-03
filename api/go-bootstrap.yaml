@@ -1,0 +1,127 @@
+openapi: '3.0.2'
+info:
+  title: go-bootstrap
+  description: golang REST service bootstrap for kitabisa backend engineer team.
+  version: '1.0.0'
+servers:
+  - url: http://localhost:4500
+    description: local
+security:
+  - Key: []
+    Secret: []
+paths:
+  /health_check:
+    get:
+      summary: Health Check
+      description: checking service and all dependencies is up and running
+      tags:
+        - system
+      responses:
+        200:
+          description: Success
+          $ref: "#components/schemas/ResponseBody"
+        # 500:
+        #   description: Internal Server Error
+        #   content:
+        #     application/json:
+        #       schema:
+        #         $ref: "#components/schemas/ErrorResponse"
+
+components:
+  schemas:
+    ResponseBody:
+      type: object
+      description: this is the response format on every request.
+      required:
+        - response_code
+        - response_desc
+        - meta
+      properties:
+        next:
+          type: string
+          description: token for next page of data. Usage, `url?next={next value}`
+        data: 
+          type: array
+          description: array of data object responses. see another schema for the object
+          items:
+            type: object
+        response_code:
+          type: string
+          description: see ResponseCode schema for available list
+        response_desc:
+          type: object 
+          properties:
+            id:
+              type: string
+            en:
+              type: string
+        meta:
+          type: object
+          properties:
+            version:
+              type: string
+              example: v1.0.0
+            api_status:
+              type: string
+              example: stable
+            api_env:
+              type: string
+              example: staging
+    ResponseCode:
+      type: string
+      description: >
+        response code for any error:
+          * `101001` - Database connection error
+          * `101002` - Cache connection error
+          * `101003` - Influx connection error
+  parameters:
+    # our default headers
+    xKtbsRequestId:
+      name: X-Ktbs-Request-ID
+      in: header
+      schema:
+        type: string
+      required: true
+      description: request ID, should be unique for every request. Use uuidv4
+    xKtbsApiVersion:
+      in: header
+      name: X-Ktbs-Api-Version
+      schema:
+        type: string
+      required: true
+      description: version of destination API.
+    xKtbsClientVersion:
+      in: header
+      name: X-Ktbs-Client-Version
+      schema:
+        type: string
+      required: true
+      description: Client version that hit the API.
+    xKtbsPlatformName:
+      in: header
+      name: X-Ktbs-Platform-Name
+      schema:
+        type: string
+      required: true
+      description: Client platform
+    xKtbsClientName:
+      in: header
+      name: X-Ktbs-Client-Name
+      schema:
+        type: string
+      required: true
+      description: name of origin client
+    xKtbsSignature:
+      in: header
+      name: X-Ktbs-Signature
+      schema:
+        type: string
+      required: false
+      description: Our signature, see on gitbook backend section for detail, here https://app.gitbook.com/@kitabisa-engineering/s/backend/standardization-1/api-headers
+    xKtbsTime:
+      in: header
+      name: X-Ktbs-Time
+      schema:
+        type: string
+      required: false
+      description: UTC unix timestamp

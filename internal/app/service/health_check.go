@@ -41,7 +41,7 @@ func NewHealthCheck(option Option) IHealthCheck {
 func (h *healthCheck) HealthCheckDbMysql() (err error) {
 	err = h.dbMysql.Db.Ping()
 	if err != nil {
-		h.logger.AddMessage(log.FatalLevel, err.Error()).Print()
+		h.logger.AddMessage(log.FatalLevel, err.Error())
 		err = commons.ErrDBConn
 	}
 	return
@@ -50,7 +50,7 @@ func (h *healthCheck) HealthCheckDbMysql() (err error) {
 func (h *healthCheck) HealthCheckDbPostgres() (err error) {
 	err = h.dbPostgre.Db.Ping()
 	if err != nil {
-		h.logger.AddMessage(log.FatalLevel, err.Error()).Print()
+		h.logger.AddMessage(log.FatalLevel, err.Error())
 		err = commons.ErrDBConn
 	}
 	return
@@ -60,7 +60,7 @@ func (h *healthCheck) HealthCheckDbCache() (err error) {
 	cacheConn := h.cachePool.Get()
 	_, err = cacheConn.Do("PING")
 	if err != nil {
-		h.logger.AddMessage(log.FatalLevel, err.Error()).Print()
+		h.logger.AddMessage(log.FatalLevel, err.Error())
 		err = commons.ErrCacheConn
 		return
 	}
@@ -72,7 +72,7 @@ func (h *healthCheck) HealthCheckDbCache() (err error) {
 func (h *healthCheck) HealthCheckInflux() (err error) {
 	err = h.influx.Ping()
 	if err != nil {
-		h.logger.AddMessage(log.FatalLevel, err.Error()).Print()
+		h.logger.AddMessage(log.FatalLevel, err.Error())
 		err = commons.ErrInfluxConn
 	}
 

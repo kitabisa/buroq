@@ -5,9 +5,9 @@ import (
 	cmiddleware "github.com/go-chi/chi/middleware"
 	"github.com/gomodule/redigo/redis"
 	"github.com/kitabisa/go-bootstrap/config"
+	"github.com/kitabisa/go-bootstrap/internal/app/commons"
 	"github.com/kitabisa/go-bootstrap/internal/app/handler"
 	"github.com/kitabisa/go-bootstrap/internal/app/service"
-	"github.com/kitabisa/go-bootstrap/internal/app/commons"
 	"github.com/kitabisa/go-bootstrap/version"
 	phttp "github.com/kitabisa/perkakas/v2/http"
 	"github.com/kitabisa/perkakas/v2/log"
@@ -34,7 +34,7 @@ func Router(cfg config.Provider, service *service.Service, dbMysql *gorp.DbMap, 
 	r.Use(cmiddleware.RequestID)
 	r.Use(cmiddleware.RealIP)
 	r.Use(logMiddleware)
-	// r.Use(headerCheckMiddleware)
+	// r.Use(headerCheckMiddleware) //use this if you want to use default kitabisa's header
 	r.Use(cmiddleware.Recoverer)
 
 	// the handler
@@ -52,7 +52,6 @@ func Router(cfg config.Provider, service *service.Service, dbMysql *gorp.DbMap, 
 
 	healthCheckHandler.HandlerOption = handlerOpt
 	healthCheckHandler.Handler = phandler(healthCheckHandler.HealthCheck)
-	// ph := phttp.NewHttpHandler(handlerCtx)
 
 	// Setup your routing here
 	r.Method(http.MethodGet, "/health_check", healthCheckHandler)
