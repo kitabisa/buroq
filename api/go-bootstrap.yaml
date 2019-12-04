@@ -19,16 +19,96 @@ paths:
       responses:
         200:
           description: Success
-          $ref: "#components/schemas/ResponseBody"
-        # 500:
-        #   description: Internal Server Error
-        #   content:
-        #     application/json:
-        #       schema:
-        #         $ref: "#components/schemas/ErrorResponse"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthCheck"
+              example:
+                data: []
+                response_code: "000000"
+                response_desc: 
+                  id: ""
+                  en: ""
+                meta:
+                  version: "v1.0.0"
+                  api_status: "stable"
+                  api_env: "local"
+        500:
+          description: Something error on the internal service
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthCheck"
+              examples:
+                DBError:
+                  value:
+                    data: []
+                    response_code: "101001"
+                    response_desc: 
+                      id: "Error koneksi ke Database"
+                      en: "Database connection error"
+                    meta:
+                      version: "v1.0.0"
+                      api_status: "stable"
+                      api_env: "local"
+                CacheError:
+                  value:
+                    data: []
+                    response_code: "101002"
+                    response_desc: 
+                      id: "Error koneksi ke Cache server"
+                      en: "Cache connection error"
+                    meta:
+                      version: "v1.0.0"
+                      api_status: "stable"
+                      api_env: "local"
+                InfluxError:
+                  value:
+                    data: []
+                    response_code: "101003"
+                    response_desc: 
+                      id: "Error koneksi ke Influx"
+                      en: "Influx connection error"
+                    meta:
+                      version: "v1.0.0"
+                      api_status: "stable"
+                      api_env: "local"
 
 components:
   schemas:
+    HealthCheck:
+      type: object
+      description: health check responses
+      required:
+        - response_code
+        - response_desc
+        - meta
+      properties:
+        data: 
+          type: array
+          description: empty
+          items:
+            type: object
+        response_code:
+          type: string
+          description: 6 digits response code
+        response_desc:
+          description: description of response code
+          type: object 
+          properties:
+            id:
+              type: string
+            en:
+              type: string
+        meta:
+          type: object
+          properties:
+            version:
+              type: string
+            api_status:
+              type: string
+            api_env:
+              type: string
     ResponseBody:
       type: object
       description: this is the response format on every request.
