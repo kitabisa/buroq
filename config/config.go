@@ -37,8 +37,8 @@ func readViperConfig() *viper.Viper {
 	v := viper.New()
 	v.AddConfigPath(".")
 	v.AddConfigPath("./params")
-	v.AddConfigPath("/opt/go-bootstrap/params")
-	v.SetConfigName("go-bootstrap")
+	v.AddConfigPath("/opt/buroq/params")
+	v.SetConfigName("buroq")
 
 	err := v.ReadInConfig()
 	if err == nil {

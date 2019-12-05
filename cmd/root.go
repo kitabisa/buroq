@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/kitabisa/go-bootstrap/config"
-	"github.com/kitabisa/go-bootstrap/internal/app/appcontext"
-	"github.com/kitabisa/go-bootstrap/internal/app/repository"
-	"github.com/kitabisa/go-bootstrap/internal/app/server"
-	"github.com/kitabisa/go-bootstrap/internal/app/service"
+	"github.com/kitabisa/buroq/config"
+	"github.com/kitabisa/buroq/internal/app/appcontext"
+	"github.com/kitabisa/buroq/internal/app/repository"
+	"github.com/kitabisa/buroq/internal/app/server"
+	"github.com/kitabisa/buroq/internal/app/service"
 	"github.com/kitabisa/perkakas/v2/log"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -40,7 +40,7 @@ func init() {
 
 func start() {
 	cfg := config.Config()
-	logger := log.NewLogger("go-bootstrap")
+	logger := log.NewLogger("buroq")
 
 	app := appcontext.NewAppContext(cfg)
 	dbMysql, err := app.GetDBInstance(appcontext.DBDialectMysql)

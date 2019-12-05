@@ -8,8 +8,8 @@ import (
 	"os/signal"
 
 	"github.com/gomodule/redigo/redis"
-	"github.com/kitabisa/go-bootstrap/config"
-	"github.com/kitabisa/go-bootstrap/internal/app/service"
+	"github.com/kitabisa/buroq/config"
+	"github.com/kitabisa/buroq/internal/app/service"
 	"github.com/kitabisa/perkakas/v2/log"
 	"github.com/sirupsen/logrus"
 	"gopkg.in/gorp.v2"

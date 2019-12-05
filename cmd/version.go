@@ -5,7 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/kitabisa/go-bootstrap/version"
+	"github.com/kitabisa/buroq/version"
 )
 
 // versionCmd represents the version command

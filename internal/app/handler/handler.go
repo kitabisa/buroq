@@ -2,8 +2,8 @@ package handler
 
 import (
 	"github.com/gomodule/redigo/redis"
-	"github.com/kitabisa/go-bootstrap/config"
-	"github.com/kitabisa/go-bootstrap/internal/app/service"
+	"github.com/kitabisa/buroq/config"
+	"github.com/kitabisa/buroq/internal/app/service"
 	"github.com/kitabisa/perkakas/v2/log"
 	"gopkg.in/gorp.v2"
 )

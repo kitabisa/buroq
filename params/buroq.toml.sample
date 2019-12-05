@@ -1,13 +1,13 @@
 [app]
 host = "0.0.0.0"
 port = 4500
-name = "go-bootstrap"
+name = "buroq"
 secret = "any_secret"
 
 [postgre]
 host = "your_db_host"
 port = 5432
-name = "go-bootstrap"
+name = "buroq"
 username = "your_username"
 password = "your_password"
 pool_size = 5
@@ -15,7 +15,7 @@ pool_size = 5
 [mysql]
 host = "your_db_host"
 port = 3306
-name = "go-bootstrap"
+name = "buroq"
 username = "your_username"
 password = "your_password"
 conn_open_max = 280 #maximum connection can be open
@@ -44,7 +44,7 @@ locker_expiry = "5s"
 host = "your_influx_host"
 user = "your_username"
 pass = "your_password"
-name = "go-bootstrap"
+name = "buroq"
 retention_policy = ""
 timeout = "5s"
 insecure_skip_verify = false

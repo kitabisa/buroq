@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/kitabisa/go-bootstrap/cmd"
+	"github.com/kitabisa/buroq/cmd"
 )
 
 func main() {

@@ -5,8 +5,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/kitabisa/go-bootstrap/config"
-	"github.com/kitabisa/go-bootstrap/internal/app/appcontext"
+	"github.com/kitabisa/buroq/config"
+	"github.com/kitabisa/buroq/internal/app/appcontext"
 	"github.com/kitabisa/perkakas/v2/log"
 	migrate "github.com/rubenv/sql-migrate"
 	"github.com/spf13/cobra"
@@ -19,7 +19,7 @@ var migrateUpCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		c := config.Config()
 		appCtx := appcontext.NewAppContext(c)
-		logger := log.NewLogger("go-bootstrap-migrate")
+		logger := log.NewLogger("buroq-migrate")
 		mSource := getMigrateSource()
 
 		doMigrate(appCtx, logger, mSource, appcontext.DBDialectMysql, migrate.Up)
@@ -34,7 +34,7 @@ var migrateDownCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		c := config.Config()
 		appCtx := appcontext.NewAppContext(c)
-		logger := log.NewLogger("go-bootstrap-migrate")
+		logger := log.NewLogger("buroq-migrate")
 		mSource := getMigrateSource()
 
 		doMigrate(appCtx, logger, mSource, appcontext.DBDialectMysql, migrate.Down)
@@ -48,7 +48,7 @@ var migrateNewCmd = &cobra.Command{
 	Long:  `Create new migration file on folder migrations/sql with timestamp as prefix`,
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		logger := log.NewLogger("go-bootstrap-migrate")
+		logger := log.NewLogger("buroq-migrate")
 		mDir := "migrations/sql/"
 
 		createMigrationFile(logger, mDir, args[0])
