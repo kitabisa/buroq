@@ -1,4 +1,4 @@
-module github.com/kitabisa/go-bootstrap
+module github.com/kitabisa/buroq
 
 go 1.13
 

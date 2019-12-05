@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/kitabisa/go-bootstrap/config"
+	"github.com/kitabisa/buroq/config"
 
 	phttp "github.com/kitabisa/perkakas/v2/http"
 	"github.com/kitabisa/perkakas/v2/structs"

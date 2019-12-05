@@ -2,8 +2,8 @@ package service
 
 import (
 	"github.com/gomodule/redigo/redis"
-	"github.com/kitabisa/go-bootstrap/internal/app/commons"
-	"github.com/kitabisa/go-bootstrap/internal/app/repository"
+	"github.com/kitabisa/buroq/internal/app/commons"
+	"github.com/kitabisa/buroq/internal/app/repository"
 	"github.com/kitabisa/perkakas/v2/log"
 	"github.com/kitabisa/perkakas/v2/metrics/influx"
 	"gopkg.in/gorp.v2"
