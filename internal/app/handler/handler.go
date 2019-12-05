@@ -5,6 +5,7 @@ import (
 	"github.com/kitabisa/buroq/config"
 	"github.com/kitabisa/buroq/internal/app/service"
 	"github.com/kitabisa/perkakas/v2/log"
+	"github.com/kitabisa/perkakas/v2/metrics/influx"
 	"gopkg.in/gorp.v2"
 )
 
@@ -14,5 +15,6 @@ type HandlerOption struct {
 	DbMysql   *gorp.DbMap
 	DbPostgre *gorp.DbMap
 	CachePool *redis.Pool
+	Influx    *influx.Client
 	Logger    *log.Logger
 }

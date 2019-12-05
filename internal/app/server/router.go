@@ -1,6 +1,8 @@
 package server
 
 import (
+	"net/http"
+
 	"github.com/go-chi/chi"
 	cmiddleware "github.com/go-chi/chi/middleware"
 	"github.com/gomodule/redigo/redis"
@@ -11,14 +13,14 @@ import (
 	"github.com/kitabisa/buroq/version"
 	phttp "github.com/kitabisa/perkakas/v2/http"
 	"github.com/kitabisa/perkakas/v2/log"
+	"github.com/kitabisa/perkakas/v2/metrics/influx"
 	pmiddleware "github.com/kitabisa/perkakas/v2/middleware"
 	pstructs "github.com/kitabisa/perkakas/v2/structs"
 	"gopkg.in/gorp.v2"
-	"net/http"
 )
 
 // Router a chi mux
-func Router(cfg config.Provider, service *service.Service, dbMysql *gorp.DbMap, dbPostgre *gorp.DbMap, cachePool *redis.Pool, logger *log.Logger) *chi.Mux {
+func Router(cfg config.Provider, service *service.Service, dbMysql *gorp.DbMap, dbPostgre *gorp.DbMap, cachePool *redis.Pool, influx *influx.Client, logger *log.Logger) *chi.Mux {
 	handlerCtx := phttp.NewContextHandler(pstructs.Meta{
 		Version: version.Version,
 		Status:  "stable", //TODO: ask infra if this is used
@@ -45,6 +47,7 @@ func Router(cfg config.Provider, service *service.Service, dbMysql *gorp.DbMap, 
 		DbMysql:   dbMysql,
 		DbPostgre: dbPostgre,
 		CachePool: cachePool,
+		Influx:    influx,
 		Logger:    logger,
 	}
 

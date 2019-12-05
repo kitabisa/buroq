@@ -11,6 +11,7 @@ import (
 	"github.com/kitabisa/buroq/config"
 	"github.com/kitabisa/buroq/internal/app/service"
 	"github.com/kitabisa/perkakas/v2/log"
+	"github.com/kitabisa/perkakas/v2/metrics/influx"
 	"github.com/sirupsen/logrus"
 	"gopkg.in/gorp.v2"
 )
@@ -26,17 +27,19 @@ type server struct {
 	dbMysql   *gorp.DbMap
 	dbPostgre *gorp.DbMap
 	cachePool *redis.Pool
+	influx    *influx.Client
 	logger    *log.Logger
 }
 
 // NewServer create object server
-func NewServer(config config.Provider, service *service.Service, dbMysql *gorp.DbMap, dbPostgre *gorp.DbMap, cachePool *redis.Pool, logger *log.Logger) IServer {
+func NewServer(config config.Provider, service *service.Service, dbMysql *gorp.DbMap, dbPostgre *gorp.DbMap, cachePool *redis.Pool, influx *influx.Client, logger *log.Logger) IServer {
 	return &server{
 		config:    config,
 		service:   service,
 		dbMysql:   dbMysql,
 		dbPostgre: dbPostgre,
 		cachePool: cachePool,
+		influx:    influx,
 		logger:    logger,
 	}
 }
@@ -60,7 +63,7 @@ func (s *server) StartApp() {
 	}()
 
 	srv.Addr = fmt.Sprintf("%s:%d", s.config.GetString("app.host"), s.config.GetInt("app.port"))
-	srv.Handler = Router(s.config, s.service, s.dbMysql, s.dbPostgre, s.cachePool, s.logger)
+	srv.Handler = Router(s.config, s.service, s.dbMysql, s.dbPostgre, s.cachePool, s.influx, s.logger)
 
 	logrus.Infof("[API] HTTP serve at %s\n", srv.Addr)
 

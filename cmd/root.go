@@ -86,7 +86,7 @@ func start() {
 		Repo:      repo,
 	})
 
-	server := server.NewServer(cfg, service, dbMysql, dbPostgre, cache, logger)
+	server := server.NewServer(cfg, service, dbMysql, dbPostgre, cache, influx, logger)
 
 	// run app
 	server.StartApp()
