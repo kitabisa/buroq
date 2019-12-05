@@ -45,3 +45,7 @@ just build it and run. `localhost:[port]/health_check` will give you HTTP status
 ## IMPORTANT
 
 * whenever you start new service, please make the documentation using open api specification and put it on folder `/api`
+
+## Author
+
+* Arditya Wahyu N - *initial work* - [ardityawahyu](https://github.com/ardityawahyu)
