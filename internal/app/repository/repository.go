@@ -1,19 +1,10 @@
 package repository
 
-import (
-	"github.com/gomodule/redigo/redis"
-	"github.com/kitabisa/perkakas/v2/log"
-	"github.com/kitabisa/perkakas/v2/metrics/influx"
-	"gopkg.in/gorp.v2"
-)
+import "github.com/kitabisa/buroq/internal/app/commons"
 
 // Option anything any repo object needed
 type Option struct {
-	DbMysql   *gorp.DbMap
-	DbPostgre *gorp.DbMap
-	CachePool *redis.Pool
-	Influx    *influx.Client
-	Logger    *log.Logger
+	commons.Options
 }
 
 // Repository all repo object injected here

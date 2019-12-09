@@ -20,6 +20,6 @@ require (
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/viper v1.4.0
 	github.com/ziutek/mymysql v1.5.4 // indirect
-	gopkg.in/gorp.v1 v1.7.2 // indirect
+	gopkg.in/gorp.v1 v1.7.2
 	gopkg.in/gorp.v2 v2.0.0
 )

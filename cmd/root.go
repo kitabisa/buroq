@@ -6,6 +6,7 @@ import (
 
 	"github.com/kitabisa/buroq/config"
 	"github.com/kitabisa/buroq/internal/app/appcontext"
+	"github.com/kitabisa/buroq/internal/app/commons"
 	"github.com/kitabisa/buroq/internal/app/repository"
 	"github.com/kitabisa/buroq/internal/app/server"
 	"github.com/kitabisa/buroq/internal/app/service"
@@ -69,24 +70,25 @@ func start() {
 		return
 	}
 
-	repo := wiringRepository(repository.Option{
+	opt := commons.Options{
+		Config:    cfg,
 		DbMysql:   dbMysql,
 		DbPostgre: dbPostgre,
 		CachePool: cache,
 		Influx:    influx,
 		Logger:    logger,
+	}
+
+	repo := wiringRepository(repository.Option{
+		Options: opt,
 	})
 
 	service := wiringService(service.Option{
-		DbMysql:   dbMysql,
-		DbPostgre: dbPostgre,
-		CachePool: cache,
-		Influx:    influx,
-		Logger:    logger,
-		Repo:      repo,
+		Options:    opt,
+		Repository: repo,
 	})
 
-	server := server.NewServer(cfg, service, dbMysql, dbPostgre, cache, logger)
+	server := server.NewServer(opt, service)
 
 	// run app
 	server.StartApp()
@@ -94,7 +96,7 @@ func start() {
 
 func wiringRepository(repoOption repository.Option) *repository.Repository {
 	// wiring up all your repos here
-	cacheRepo := repository.NewCacheRepository(repoOption.CachePool)
+	cacheRepo := repository.NewCacheRepository(repoOption)
 
 	repo := repository.Repository{
 		Cache: cacheRepo,
