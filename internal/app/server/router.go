@@ -5,22 +5,16 @@ import (
 
 	"github.com/go-chi/chi"
 	cmiddleware "github.com/go-chi/chi/middleware"
-	"github.com/gomodule/redigo/redis"
-	"github.com/kitabisa/buroq/config"
 	"github.com/kitabisa/buroq/internal/app/commons"
 	"github.com/kitabisa/buroq/internal/app/handler"
-	"github.com/kitabisa/buroq/internal/app/service"
 	"github.com/kitabisa/buroq/version"
 	phttp "github.com/kitabisa/perkakas/v2/http"
-	"github.com/kitabisa/perkakas/v2/log"
-	"github.com/kitabisa/perkakas/v2/metrics/influx"
 	pmiddleware "github.com/kitabisa/perkakas/v2/middleware"
 	pstructs "github.com/kitabisa/perkakas/v2/structs"
-	"gopkg.in/gorp.v2"
 )
 
 // Router a chi mux
-func Router(cfg config.Provider, service *service.Service, dbMysql *gorp.DbMap, dbPostgre *gorp.DbMap, cachePool *redis.Pool, influx *influx.Client, logger *log.Logger) *chi.Mux {
+func Router(opt handler.HandlerOption) *chi.Mux {
 	handlerCtx := phttp.NewContextHandler(pstructs.Meta{
 		Version: version.Version,
 		Status:  "stable", //TODO: ask infra if this is used
@@ -28,7 +22,7 @@ func Router(cfg config.Provider, service *service.Service, dbMysql *gorp.DbMap, 
 	})
 	commons.InjectErrors(&handlerCtx)
 
-	logMiddleware := pmiddleware.NewHttpRequestLogger(logger)
+	logMiddleware := pmiddleware.NewHttpRequestLogger(opt.Logger)
 	// headerCheckMiddleware := pmiddleware.NewHeaderCheck(handlerCtx, cfg.GetString("app.secret"))
 
 	r := chi.NewRouter()
@@ -41,19 +35,10 @@ func Router(cfg config.Provider, service *service.Service, dbMysql *gorp.DbMap, 
 
 	// the handler
 	phandler := phttp.NewHttpHandler(handlerCtx)
-	handlerOpt := handler.HandlerOption{
-		Config:    cfg,
-		Services:  service,
-		DbMysql:   dbMysql,
-		DbPostgre: dbPostgre,
-		CachePool: cachePool,
-		Influx:    influx,
-		Logger:    logger,
-	}
 
 	healthCheckHandler := handler.HealthCheckHandler{}
 
-	healthCheckHandler.HandlerOption = handlerOpt
+	healthCheckHandler.HandlerOption = opt
 	healthCheckHandler.Handler = phandler(healthCheckHandler.HealthCheck)
 
 	// Setup your routing here

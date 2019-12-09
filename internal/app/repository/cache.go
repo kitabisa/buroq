@@ -14,15 +14,15 @@ type ICacheRepo interface {
 }
 
 type cacheRepo struct {
-	cachePool *redis.Pool
-	kmutex    *kmutex.Kmutex
+	opt    Option
+	kmutex *kmutex.Kmutex
 }
 
 // NewCacheRepository initiate cache repo
-func NewCacheRepository(cachePool *redis.Pool) ICacheRepo {
+func NewCacheRepository(opt Option) ICacheRepo {
 	return &cacheRepo{
-		cachePool: cachePool,
-		kmutex:    kmutex.New(),
+		opt:    opt,
+		kmutex: kmutex.New(),
 	}
 }
 
@@ -32,7 +32,7 @@ func (c *cacheRepo) WriteCache(key string, data interface{}, ttl time.Duration) 
 	defer c.kmutex.Unlock(key)
 
 	// write data to cache
-	conn := c.cachePool.Get()
+	conn := c.opt.CachePool.Get()
 	_, err = conn.Do("SETEX", key, ttl.Seconds(), data)
 	if err != nil {
 		return err
@@ -47,7 +47,7 @@ func (c *cacheRepo) WriteCacheIfEmpty(key string, data interface{}, ttl time.Dur
 	defer c.kmutex.Unlock(key)
 
 	// check whether cache value is empty
-	conn := c.cachePool.Get()
+	conn := c.opt.CachePool.Get()
 	_, err = conn.Do("GET", key)
 	if err != nil {
 		if err == redis.ErrNil {

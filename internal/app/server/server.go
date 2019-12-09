@@ -7,13 +7,10 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/gomodule/redigo/redis"
-	"github.com/kitabisa/buroq/config"
+	"github.com/kitabisa/buroq/internal/app/commons"
+	"github.com/kitabisa/buroq/internal/app/handler"
 	"github.com/kitabisa/buroq/internal/app/service"
-	"github.com/kitabisa/perkakas/v2/log"
-	"github.com/kitabisa/perkakas/v2/metrics/influx"
 	"github.com/sirupsen/logrus"
-	"gopkg.in/gorp.v2"
 )
 
 // IServer interface for server
@@ -22,25 +19,15 @@ type IServer interface {
 }
 
 type server struct {
-	config    config.Provider
-	service   *service.Service
-	dbMysql   *gorp.DbMap
-	dbPostgre *gorp.DbMap
-	cachePool *redis.Pool
-	influx    *influx.Client
-	logger    *log.Logger
+	opt      commons.Options
+	services *service.Services
 }
 
 // NewServer create object server
-func NewServer(config config.Provider, service *service.Service, dbMysql *gorp.DbMap, dbPostgre *gorp.DbMap, cachePool *redis.Pool, influx *influx.Client, logger *log.Logger) IServer {
+func NewServer(opt commons.Options, services *service.Services) IServer {
 	return &server{
-		config:    config,
-		service:   service,
-		dbMysql:   dbMysql,
-		dbPostgre: dbPostgre,
-		cachePool: cachePool,
-		influx:    influx,
-		logger:    logger,
+		opt:      opt,
+		services: services,
 	}
 }
 
@@ -62,8 +49,12 @@ func (s *server) StartApp() {
 		close(idleConnectionClosed)
 	}()
 
-	srv.Addr = fmt.Sprintf("%s:%d", s.config.GetString("app.host"), s.config.GetInt("app.port"))
-	srv.Handler = Router(s.config, s.service, s.dbMysql, s.dbPostgre, s.cachePool, s.influx, s.logger)
+	srv.Addr = fmt.Sprintf("%s:%d", s.opt.Config.GetString("app.host"), s.opt.Config.GetInt("app.port"))
+	hOpt := handler.HandlerOption{
+		Options:  s.opt,
+		Services: s.services,
+	}
+	srv.Handler = Router(hOpt)
 
 	logrus.Infof("[API] HTTP serve at %s\n", srv.Addr)
 
