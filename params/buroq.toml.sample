@@ -5,6 +5,7 @@ name = "buroq"
 secret = "any_secret"
 
 [postgre]
+is_enabled = false
 host = "your_db_host"
 port = 5432
 name = "buroq"
@@ -13,6 +14,7 @@ password = "your_password"
 pool_size = 5
 
 [mysql]
+is_enabled = false
 host = "your_db_host"
 port = 3306
 name = "buroq"
@@ -24,6 +26,7 @@ conn_lifetime_max = "0s" #maximum duration connection lifetime max
 additional_parameters = "charset=utf8&parseTime=True&loc=Asia%2fJakarta&time_zone=%27%2B07%3A00%27"
 
 [cache]
+is_enabled = false
 host = "your_cache_host"
 port = 6379
 dial_connect_timeout = "5s"
@@ -41,6 +44,7 @@ locker_retry_delay = "1s"
 locker_expiry = "5s"
 
 [influx]
+is_enabled = false
 host = "your_influx_host"
 user = "your_username"
 pass = "your_password"

@@ -8,6 +8,7 @@ import (
 	"gopkg.in/gorp.v2"
 )
 
+// DBPostgreOption options for postgre connection
 type DBPostgreOption struct {
 	Host        string
 	Port        int
@@ -17,6 +18,7 @@ type DBPostgreOption struct {
 	MaxPoolSize int
 }
 
+// NewPostgreDatabase return gorp dbmap object with postgre options param
 func NewPostgreDatabase(option DBPostgreOption) (*gorp.DbMap, error) {
 	db, err := sql.Open("postgres", fmt.Sprintf("host=%s port=%d user=%s dbname=%s password=%s sslmode=disable", option.Host, option.Port, option.Username, option.DBName, option.Password))
 	if err != nil {
