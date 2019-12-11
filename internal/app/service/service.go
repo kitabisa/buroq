@@ -11,7 +11,7 @@ type Option struct {
 	*repository.Repository
 }
 
-// Service all service object injected here
+// Services all service object injected here
 type Services struct {
 	HealthCheck IHealthCheck
 }

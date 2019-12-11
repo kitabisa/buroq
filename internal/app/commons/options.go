@@ -8,6 +8,7 @@ import (
 	"gopkg.in/gorp.v2"
 )
 
+// Options common option for all object that needed
 type Options struct {
 	Config    config.Provider
 	DbMysql   *gorp.DbMap

@@ -9,6 +9,7 @@ import (
 	"gopkg.in/gorp.v2"
 )
 
+// DBMysqlOption options for mysql connection
 type DBMysqlOption struct {
 	Host                 string
 	Port                 int
@@ -21,6 +22,7 @@ type DBMysqlOption struct {
 	ConnMaxLifetime      time.Duration
 }
 
+// NewMysqlDatabase return gorp dbmap object with MySQL options param
 func NewMysqlDatabase(option DBMysqlOption) (*gorp.DbMap, error) {
 	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?%s", option.Username, option.Password, option.Host, option.Port, option.DBName, option.AdditionalParameters))
 	if err != nil {
