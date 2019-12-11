@@ -1,6 +1,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/kitabisa/buroq)](https://goreportcard.com/report/github.com/kitabisa/buroq)
 ![technology:go](https://img.shields.io/badge/technology-go-blue.svg)
 [![Maintainability](https://api.codeclimate.com/v1/badges/b6e84c6b2bb2a819b198/maintainability)](https://codeclimate.com/github/kitabisa/buroq/maintainability)
+[![CircleCI](https://circleci.com/gh/kitabisa/buroq.svg?style=svg)](https://circleci.com/gh/kitabisa/buroq)
 
 # buroq
 
