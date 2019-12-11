@@ -1,3 +1,7 @@
+[![Go Report Card](https://goreportcard.com/badge/github.com/kitabisa/buroq)](https://goreportcard.com/report/github.com/kitabisa/buroq)
+![technology:go](https://img.shields.io/badge/technology-go-blue.svg)
+[![Maintainability](https://api.codeclimate.com/v1/badges/b6e84c6b2bb2a819b198/maintainability)](https://codeclimate.com/github/kitabisa/buroq/maintainability)
+
 # buroq
 
 this is a bootstrap service build with GO for our cookie cutter.
