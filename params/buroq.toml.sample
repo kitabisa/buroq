@@ -6,6 +6,7 @@ secret = "any_secret"
 
 [postgre]
 is_enabled = false
+is_migration_enable = false
 host = "your_db_host"
 port = 5432
 name = "buroq"
@@ -15,6 +16,7 @@ pool_size = 5
 
 [mysql]
 is_enabled = false
+is_migration_enable = false
 host = "your_db_host"
 port = 3306
 name = "buroq"
