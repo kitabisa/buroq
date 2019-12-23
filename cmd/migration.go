@@ -22,8 +22,13 @@ var migrateUpCmd = &cobra.Command{
 		logger := log.NewLogger("buroq-migrate")
 		mSource := getMigrateSource()
 
-		doMigrate(appCtx, logger, mSource, appcontext.DBDialectMysql, migrate.Up)
-		doMigrate(appCtx, logger, mSource, appcontext.DBDialectPostgres, migrate.Up)
+		if c.GetBool("mysql.is_enable") && c.GetBool("mysql.is_migration_enable") {
+			doMigrate(appCtx, logger, mSource, appcontext.DBDialectMysql, migrate.Up)
+		}
+
+		if c.GetBool("postgre.is_enable") && c.GetBool("postgre.is_migration_enable") {
+			doMigrate(appCtx, logger, mSource, appcontext.DBDialectPostgres, migrate.Up)
+		}
 	},
 }
 
@@ -37,8 +42,13 @@ var migrateDownCmd = &cobra.Command{
 		logger := log.NewLogger("buroq-migrate")
 		mSource := getMigrateSource()
 
-		doMigrate(appCtx, logger, mSource, appcontext.DBDialectMysql, migrate.Down)
-		doMigrate(appCtx, logger, mSource, appcontext.DBDialectPostgres, migrate.Down)
+		if c.GetBool("mysql.is_enable") && c.GetBool("mysql.is_migration_enable") {
+			doMigrate(appCtx, logger, mSource, appcontext.DBDialectMysql, migrate.Down)
+		}
+
+		if c.GetBool("postgre.is_enable") && c.GetBool("postgre.is_migration_enable") {
+			doMigrate(appCtx, logger, mSource, appcontext.DBDialectPostgres, migrate.Down)
+		}
 	},
 }
 

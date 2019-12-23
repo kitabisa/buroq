@@ -12,3 +12,7 @@
 *.out
 *.toml
 buroq
+
+# VIM
+*.swo
+*.swp

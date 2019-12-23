@@ -21,7 +21,7 @@ just build it and run. `localhost:[port]/health_check` will give you HTTP status
 * driver using [redigo](https://github.com/gomodule/redigo)
 
 ## Migration
-
+Before you do the migration, please specify what DB that you want to migrate in configuration file with key `is_migration_enable`.
 * using [sql-migrate](https://github.com/rubenv/sql-migrate)
 * command: `migrate` for migrate up
 * command: `migratedown` for migrate down
