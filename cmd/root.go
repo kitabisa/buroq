@@ -5,9 +5,13 @@ import (
 	"os"
 
 	"github.com/gomodule/redigo/redis"
+	"github.com/graphql-go/graphql"
 	"github.com/kitabisa/buroq/config"
 	"github.com/kitabisa/buroq/internal/app/appcontext"
 	"github.com/kitabisa/buroq/internal/app/commons"
+	"github.com/kitabisa/buroq/internal/app/graphql/mutation"
+	"github.com/kitabisa/buroq/internal/app/graphql/query"
+	"github.com/kitabisa/buroq/internal/app/graphql/resolver"
 	"github.com/kitabisa/buroq/internal/app/repository"
 	"github.com/kitabisa/buroq/internal/app/server"
 	"github.com/kitabisa/buroq/internal/app/service"
@@ -104,6 +108,19 @@ func start() {
 		Options:    opt,
 		Repository: repo,
 	})
+
+	// Init graphql: load all schema and connect to services
+	resolver.Init(
+		resolver.WithServices(service),
+	)
+	schema, err := graphql.NewSchema(graphql.SchemaConfig{
+		Query:    graphql.NewObject(query.GetQuerySchema()),
+		Mutation: graphql.NewObject(mutation.GetMutationSchema()),
+	})
+	if err != nil {
+		logrus.Fatalf("Failed to create schema for the graphql: %s", err)
+		return
+	}
 
 	server := server.NewServer(opt, service)
 

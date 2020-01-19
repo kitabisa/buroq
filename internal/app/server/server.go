@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 
+	"github.com/graphql-go/graphql"
 	"github.com/kitabisa/buroq/internal/app/commons"
 	"github.com/kitabisa/buroq/internal/app/handler"
 	"github.com/kitabisa/buroq/internal/app/service"
@@ -19,15 +20,17 @@ type IServer interface {
 }
 
 type server struct {
-	opt      commons.Options
-	services *service.Services
+	opt           commons.Options
+	services      *service.Services
+	graphqlSchema graphql.Schema
 }
 
 // NewServer create object server
-func NewServer(opt commons.Options, services *service.Services) IServer {
+func NewServer(opt commons.Options, services *service.Services, schema graphql.Schema) IServer {
 	return &server{
-		opt:      opt,
-		services: services,
+		opt:           opt,
+		services:      services,
+		graphqlSchema: schema,
 	}
 }
 
@@ -51,8 +54,9 @@ func (s *server) StartApp() {
 
 	srv.Addr = fmt.Sprintf("%s:%d", s.opt.Config.GetString("app.host"), s.opt.Config.GetInt("app.port"))
 	hOpt := handler.HandlerOption{
-		Options:  s.opt,
-		Services: s.services,
+		Options:       s.opt,
+		GraphqlSchema: s.graphqlSchema,
+		Services:      s.services,
 	}
 	srv.Handler = Router(hOpt)
 
