@@ -122,7 +122,7 @@ func start() {
 		return
 	}
 
-	server := server.NewServer(opt, service)
+	server := server.NewServer(opt, service, schema)
 
 	// run app
 	server.StartApp()
