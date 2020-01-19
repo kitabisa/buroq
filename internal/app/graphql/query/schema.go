@@ -2,6 +2,7 @@ package query
 
 import (
 	"github.com/graphql-go/graphql"
+	"github.com/kitabisa/buroq/internal/app/graphql/resolver"
 	"github.com/kitabisa/buroq/internal/app/graphql/types"
 )
 
@@ -9,7 +10,8 @@ import (
 func GetQuerySchema() graphql.ObjectConfig {
 	queryFields := graphql.Fields{
 		"books": &graphql.Field{
-			Type: types.BookType,
+			Type:    types.BookType,
+			Resolve: resolver.GetBooks,
 		},
 		"book": &graphql.Field{
 			Type: graphql.NewList(types.BookType),

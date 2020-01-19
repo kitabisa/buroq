@@ -9,7 +9,6 @@ import (
 	"github.com/kitabisa/buroq/config"
 	"github.com/kitabisa/buroq/internal/app/appcontext"
 	"github.com/kitabisa/buroq/internal/app/commons"
-	"github.com/kitabisa/buroq/internal/app/graphql/mutation"
 	"github.com/kitabisa/buroq/internal/app/graphql/query"
 	"github.com/kitabisa/buroq/internal/app/graphql/resolver"
 	"github.com/kitabisa/buroq/internal/app/repository"
@@ -114,8 +113,8 @@ func start() {
 		resolver.WithServices(service),
 	)
 	schema, err := graphql.NewSchema(graphql.SchemaConfig{
-		Query:    graphql.NewObject(query.GetQuerySchema()),
-		Mutation: graphql.NewObject(mutation.GetMutationSchema()),
+		Query: graphql.NewObject(query.GetQuerySchema()),
+		// Mutation: graphql.NewObject(mutation.GetMutationSchema()),
 	})
 	if err != nil {
 		logrus.Fatalf("Failed to create schema for the graphql: %s", err)

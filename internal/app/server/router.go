@@ -5,6 +5,7 @@ import (
 
 	"github.com/go-chi/chi"
 	cmiddleware "github.com/go-chi/chi/middleware"
+	gqlhandler "github.com/graphql-go/graphql-go-handler"
 	"github.com/kitabisa/buroq/internal/app/commons"
 	"github.com/kitabisa/buroq/internal/app/handler"
 	"github.com/kitabisa/buroq/version"
@@ -41,8 +42,13 @@ func Router(opt handler.HandlerOption) *chi.Mux {
 	healthCheckHandler.HandlerOption = opt
 	healthCheckHandler.Handler = phandler(healthCheckHandler.HealthCheck)
 
+	gqlHandler := gqlhandler.New(&gqlhandler.Config{
+		Schema: &opt.GraphqlSchema,
+	})
+
 	// Setup your routing here
 	r.Method(http.MethodGet, "/health_check", healthCheckHandler)
+	r.Handle("/graphql", gqlHandler)
 	return r
 }
 
