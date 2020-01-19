@@ -10,16 +10,17 @@ import (
 func GetQuerySchema() graphql.ObjectConfig {
 	queryFields := graphql.Fields{
 		"books": &graphql.Field{
-			Type:    types.BookType,
+			Type:    graphql.NewList(types.BookType),
 			Resolve: resolver.GetBooks,
 		},
 		"book": &graphql.Field{
-			Type: graphql.NewList(types.BookType),
+			Type: types.BookType,
 			Args: graphql.FieldConfigArgument{
 				"id": &graphql.ArgumentConfig{
 					Type: graphql.NewNonNull(graphql.Int),
 				},
 			},
+			Resolve: resolver.GetBook,
 		},
 	}
 

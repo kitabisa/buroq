@@ -21,6 +21,7 @@ require (
 	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/viper v1.4.0
+	github.com/triardn/graphql-resolve-nullable-field v0.0.0-20200119154404-fc8f14cb2b5d
 	github.com/ziutek/mymysql v1.5.4 // indirect
 	gopkg.in/gorp.v1 v1.7.2
 	gopkg.in/gorp.v2 v2.0.0

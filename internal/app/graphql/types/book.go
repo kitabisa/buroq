@@ -1,6 +1,9 @@
 package types
 
-import "github.com/graphql-go/graphql"
+import (
+	"github.com/graphql-go/graphql"
+	"github.com/triardn/graphql-resolve-nullable-field/pkg/gql"
+)
 
 /* BookType
 Here's sample type for graphql implementation in buroq
@@ -20,5 +23,6 @@ var BookType = graphql.NewObject(graphql.ObjectConfig{
 		"author": &graphql.Field{
 			Type: graphql.String,
 		},
+		"description": gql.NullableStringField,
 	},
 })

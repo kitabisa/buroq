@@ -224,6 +224,10 @@ github.com/stretchr/testify v1.3.0 h1:TivCn/peBQ7UY8ooIcPgZFpTNSz0Q2U6UrFlUfqbe0
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
 github.com/stvp/tempredis v0.0.0-20181119212430-b82af8480203/go.mod h1:oqN97ltKNihBbwlX8dLpwxCl3+HnXKV/R0e+sRLd9C8=
 github.com/tmc/grpc-websocket-proxy v0.0.0-20190109142713-0ad062ec5ee5/go.mod h1:ncp9v5uamzpCO7NfCPTXjqaC+bZgJeR0sMTm6dMHP7U=
+github.com/triardn/graphql-resolve-nullable-field v0.0.0-20200113062421-130d70dbd458 h1:TOKL8GT3Fwogvs+YSDkNbzhYQrn+lF8f8BX5TzXEfHo=
+github.com/triardn/graphql-resolve-nullable-field v0.0.0-20200113062421-130d70dbd458/go.mod h1:BsdZurs/4tHkUrZvf1az4c1Oc5avxWczMl4IKh03MHo=
+github.com/triardn/graphql-resolve-nullable-field v0.0.0-20200119154404-fc8f14cb2b5d h1:q/q1wSUWfc2n8jF8B/RvtbrVhyAwCSZ6tYu8Bb4BO5E=
+github.com/triardn/graphql-resolve-nullable-field v0.0.0-20200119154404-fc8f14cb2b5d/go.mod h1:BsdZurs/4tHkUrZvf1az4c1Oc5avxWczMl4IKh03MHo=
 github.com/ugorji/go v1.1.4/go.mod h1:uQMGLiO92mf5W77hV/PUCpI3pbzQx3CRekS0kk+RGrc=
 github.com/ugorji/go/codec v0.0.0-20181204163529-d75b2dcb6bc8/go.mod h1:VFNgLljTbGfSG7qAOspJ7OScBnGdDN/yBr0sguwnwf0=
 github.com/urfave/negroni v1.0.0/go.mod h1:Meg73S6kFm/4PpbYdq35yYWoCZ9mS/YSx+lKnmiohz4=
