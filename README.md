@@ -40,6 +40,10 @@ Before you do the migration, please specify what DB that you want to migrate in 
 
 * using [InfluxDB](https://www.influxdata.com)
 
+## GraphQL
+
+* you can see some docs about graphql integration with buroq under `internal/app/graphql`
+
 ## Others
 
 * using [perkakas](https://github.com/kitabisa/perkakas) for any our standard middlewares and for writing response
