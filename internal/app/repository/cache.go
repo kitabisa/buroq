@@ -33,6 +33,8 @@ func (c *cacheRepo) WriteCache(key string, data interface{}, ttl time.Duration) 
 
 	// write data to cache
 	conn := c.opt.CachePool.Get()
+	defer conn.Close()
+
 	_, err = conn.Do("SETEX", key, ttl.Seconds(), data)
 	if err != nil {
 		return err
@@ -48,6 +50,8 @@ func (c *cacheRepo) WriteCacheIfEmpty(key string, data interface{}, ttl time.Dur
 
 	// check whether cache value is empty
 	conn := c.opt.CachePool.Get()
+	defer conn.Close()
+
 	_, err = conn.Do("GET", key)
 	if err != nil {
 		if err == redis.ErrNil {
