@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"github.com/kitabisa/buroq/config"
-
 	phttp "github.com/kitabisa/perkakas/v2/http"
 	"github.com/kitabisa/perkakas/v2/structs"
 )
@@ -21,18 +20,23 @@ func InjectErrors(handlerCtx *phttp.HttpHandlerContext) {
 	// etc...
 }
 
+// getErrorResponce will return error response code & description object according to error code
+func getErrorResponce(errorCode string) structs.Response {
+	return structs.Response{
+		ResponseCode: errorCode,
+		ResponseDesc: structs.ResponseDesc{
+			ID: cfg.GetString(fmt.Sprintf("%s%s", "response_code.ID.", errorCode)),
+			EN: cfg.GetString(fmt.Sprintf("%s%s", "response_code.EN.", errorCode)),
+		},
+	}
+}
+
 // ErrDBConn error type for Error DB Connection
 var ErrDBConn = errors.New("ErrDBConn")
 
 // ErrDBConnResp ErrDBConn's response
 var ErrDBConnResp *structs.ErrorResponse = &structs.ErrorResponse{
-	Response: structs.Response{
-		ResponseCode: "101001",
-		ResponseDesc: structs.ResponseDesc{
-			ID: cfg.GetString(fmt.Sprintf("%s%s", "response_code.ID.", "101001")),
-			EN: cfg.GetString(fmt.Sprintf("%s%s", "response_code.EN.", "101001")),
-		},
-	},
+	Response:   getErrorResponce("101001"),
 	HttpStatus: http.StatusInternalServerError,
 }
 
@@ -41,13 +45,7 @@ var ErrCacheConn = errors.New("ErrCacheConn")
 
 // ErrCacheConnResp ErrCacheConn's response
 var ErrCacheConnResp *structs.ErrorResponse = &structs.ErrorResponse{
-	Response: structs.Response{
-		ResponseCode: "101002",
-		ResponseDesc: structs.ResponseDesc{
-			ID: cfg.GetString(fmt.Sprintf("%s%s", "response_code.ID.", "101002")),
-			EN: cfg.GetString(fmt.Sprintf("%s%s", "response_code.EN.", "101002")),
-		},
-	},
+	Response:   getErrorResponce("101002"),
 	HttpStatus: http.StatusInternalServerError,
 }
 
@@ -56,12 +54,6 @@ var ErrInfluxConn = errors.New("ErrInfluxConn")
 
 // ErrInfluxConnResp ErrInfluxConn's response
 var ErrInfluxConnResp *structs.ErrorResponse = &structs.ErrorResponse{
-	Response: structs.Response{
-		ResponseCode: "101003",
-		ResponseDesc: structs.ResponseDesc{
-			ID: cfg.GetString(fmt.Sprintf("%s%s", "response_code.ID.", "101003")),
-			EN: cfg.GetString(fmt.Sprintf("%s%s", "response_code.EN.", "101003")),
-		},
-	},
+	Response:   getErrorResponce("101003"),
 	HttpStatus: http.StatusInternalServerError,
 }
