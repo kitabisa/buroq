@@ -85,6 +85,12 @@ func start() {
 			logrus.Fatalf("Failed to start, error connect to DB Influx | %v", err)
 			return
 		}
+
+		err = influx.Ping()
+		if err != nil {
+			logrus.Fatalf("Failed to start, error connect to DB Influx | %v", err)
+			return
+		}
 	}
 
 	opt := commons.Options{
