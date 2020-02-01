@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/go-sql-driver/mysql" // defines mysql driver used
 	"gopkg.in/gorp.v2"
 )
 
@@ -32,6 +32,11 @@ func NewMysqlDatabase(option DBMysqlOption) (*gorp.DbMap, error) {
 	db.SetConnMaxLifetime(option.ConnMaxLifetime)
 	db.SetMaxIdleConns(option.MaxIdleConns)
 	db.SetMaxOpenConns(option.MaxOpenConns)
+
+	err = db.Ping()
+	if err != nil {
+		return nil, err
+	}
 
 	gorp := &gorp.DbMap{Db: db, Dialect: gorp.MySQLDialect{}}
 	return gorp, nil

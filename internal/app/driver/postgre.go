@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	_ "github.com/lib/pq"
+	_ "github.com/lib/pq" // defines postgreSQL driver used
 	"gopkg.in/gorp.v2"
 )
 
@@ -21,6 +21,11 @@ type DBPostgreOption struct {
 // NewPostgreDatabase return gorp dbmap object with postgre options param
 func NewPostgreDatabase(option DBPostgreOption) (*gorp.DbMap, error) {
 	db, err := sql.Open("postgres", fmt.Sprintf("host=%s port=%d user=%s dbname=%s password=%s sslmode=disable", option.Host, option.Port, option.Username, option.DBName, option.Password))
+	if err != nil {
+		return nil, err
+	}
+
+	err = db.Ping()
 	if err != nil {
 		return nil, err
 	}
