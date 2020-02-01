@@ -131,6 +131,7 @@ github.com/kitabisa/perkakas/v2 v2.8.2 h1:koYMfa2ZnCu5op7l/Q3hV851OjCRjOQysnDwnt
 github.com/kitabisa/perkakas/v2 v2.8.2/go.mod h1:MueIySU3o3mEuVNermjbiOz90jSkYOJmAum2OGp7fWo=
 github.com/kitabisa/perkakas/v2 v2.8.4 h1:hcL1t94jnpog1PlzHJcinvck/D4P2tligqfqSbK385o=
 github.com/kitabisa/perkakas/v2 v2.8.4/go.mod h1:gwBvT0froqCALYgUPMptqpKJmDKB2o5gCdFYzp2P0YA=
+github.com/kitabisa/perkakas/v2 v2.9.3 h1:66o93T5E6zMgtZ9xlJLFyiVXXvGFuh1uIuqwXVFUEyQ=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
 github.com/konsorten/go-windows-terminal-sequences v1.0.2/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
 github.com/kr/logfmt v0.0.0-20140226030751-b84e30acd515/go.mod h1:+0opPa2QZZtGFBFZlji/RkVcI2GknAs/DXo4wKdlNEc=
