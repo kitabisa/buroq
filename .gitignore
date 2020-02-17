@@ -16,3 +16,6 @@ buroq
 # VIM
 *.swo
 *.swp
+
+# Others
+*.DS_Store
