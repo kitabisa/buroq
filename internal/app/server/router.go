@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi"
@@ -42,13 +43,17 @@ func Router(opt handler.HandlerOption) *chi.Mux {
 	healthCheckHandler.HandlerOption = opt
 	healthCheckHandler.Handler = phandler(healthCheckHandler.HealthCheck)
 
-	gqlHandler := gqlhandler.New(&gqlhandler.Config{
-		Schema: &opt.GraphqlSchema,
-	})
-
 	// Setup your routing here
 	r.Method(http.MethodGet, "/health_check", healthCheckHandler)
-	r.Handle("/graphql", gqlHandler)
+
+	if opt.Config.GetBool("graphql.is_enabled") {
+		route := opt.Config.GetString("graphql.route")
+		gqlHandler := gqlhandler.New(&gqlhandler.Config{
+			Schema: &opt.GraphqlSchema,
+		})
+		r.Handle(fmt.Sprintf("/%s", route), gqlHandler)
+	}
+
 	return r
 }
 
