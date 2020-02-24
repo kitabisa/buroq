@@ -26,4 +26,5 @@ Define your query-able item for every model or operation
 If you don't want to use graphql, just disable `graphql.is_enabled` on `params/buroq.toml`.
 
 ## TODO
+
 Modify error response from graphql resolver.
