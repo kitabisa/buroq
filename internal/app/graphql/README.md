@@ -23,4 +23,7 @@ Define your query-able item for every model or operation
 
 ## Uninstall
 
-If you don't want to use graphql, just remove this `graphql` package, and modify some function on `cmd/root.go`, `internal/server/server.go`, `internal/server/router.go` to remove all error related to `graphql` package.
+If you don't want to use graphql, just disable `graphql.is_enabled` on `params/buroq.toml`.
+
+## TODO
+Modify error response from graphql resolver.
