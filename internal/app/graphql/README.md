@@ -1,6 +1,6 @@
 # buroq graphql stuff
-
-you can use the graphql by hit the endpoint `localhost:[port]/graphql`.
+you have to enable the graphql first if you want to use it. Change `is_enabled` value to `true` and you can configure the `route` on `params/buroq.toml`.
+you can use the graphql by hit the endpoint `localhost:[port]/[route]`.
 
 ## mutation
 
