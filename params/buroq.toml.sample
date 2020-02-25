@@ -55,6 +55,10 @@ retention_policy = ""
 timeout = "5s"
 insecure_skip_verify = false
 
+[graphql]
+is_enabled = false
+route = "graphql"
+
 [response_code]
     [response_code.EN]
         101001 = "Database connection error"

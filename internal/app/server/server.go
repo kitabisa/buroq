@@ -8,6 +8,7 @@ import (
 	"os/signal"
 
 	"github.com/kitabisa/buroq/internal/app/commons"
+	"github.com/kitabisa/buroq/internal/app/graphql"
 	"github.com/kitabisa/buroq/internal/app/handler"
 	"github.com/kitabisa/buroq/internal/app/service"
 	"github.com/sirupsen/logrus"
@@ -54,6 +55,14 @@ func (s *server) StartApp() {
 		Options:  s.opt,
 		Services: s.services,
 	}
+
+	if s.opt.Config.GetBool("graphql.is_enabled") {
+		logrus.Infoln("[API] GraphQL schema is enabled")
+		logrus.Infoln(fmt.Sprintf("%s%s", "[API] GraphQL route: /", s.opt.Config.GetString("graphql.route")))
+		schema := graphql.InitGraphqlSchema(s.services)
+		hOpt.GraphqlSchema = schema
+	}
+
 	srv.Handler = Router(hOpt)
 
 	logrus.Infof("[API] HTTP serve at %s\n", srv.Addr)

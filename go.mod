@@ -9,6 +9,9 @@ require (
 	github.com/gobuffalo/packr v1.30.1 // indirect
 	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/gorilla/mux v1.7.3
+	github.com/graphql-go/graphql v0.7.8
+	github.com/graphql-go/graphql-go-handler v0.2.3
+	github.com/graphql-go/handler v0.2.3 // indirect
 	github.com/im7mortal/kmutex v1.0.0
 	github.com/jinzhu/gorm v1.9.11
 	github.com/kitabisa/perkakas/v2 v2.9.3
@@ -18,6 +21,7 @@ require (
 	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/viper v1.4.0
+	github.com/triardn/graphql-resolve-nullable-field v0.0.0-20200119154404-fc8f14cb2b5d
 	github.com/ziutek/mymysql v1.5.4 // indirect
 	gopkg.in/gorp.v1 v1.7.2
 	gopkg.in/gorp.v2 v2.0.0
