@@ -100,13 +100,13 @@ func doMigrate(appCtx *appcontext.AppContext, logger *log.Logger, mSource migrat
 
 func createMigrationFile(logger *log.Logger, mDir string, mName string) error {
 	var migrationContent = `-- +migrate Up
- 		-- SQL in section 'Up' is executed when this migration is applied
- 		-- [your SQL script here]
-		 
-		 -- +migrate Down
- 		-- SQL section 'Down' is executed when this migration is rolled back
- 		-- [your SQL script here]
- 	`
+-- SQL in section 'Up' is executed when this migration is applied
+-- [your SQL script here]
+
+-- +migrate Down
+-- SQL section 'Down' is executed when this migration is rolled back
+-- [your SQL script here]
+`
 	filename := fmt.Sprintf("%d_%s.sql", time.Now().Unix(), mName)
 	filepath := fmt.Sprintf("%s%s", mDir, filename)
 
